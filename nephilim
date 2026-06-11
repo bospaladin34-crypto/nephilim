@@ -7,43 +7,18 @@ case "$1" in
   switch)
     SPEC=${2:-nephilim}
     cp "${SPEC}.spec" nephilim.spec
-    echo "→ switched to $SPEC"
-    cd compiler && cargo run --quiet --../nephilim.spec
-    echo "✓ Parsed../nephilim.spec"
-    cd../core && cargo build --quiet
-    echo "✓ core rebuilt"
+    echo "→ $SPEC"
+    cd compiler && cargo run --quiet ../nephilim.spec
+    cd ../core && cargo build --quiet
+    ;;
+  build)
+    cd compiler && cargo run --quiet ../nephilim.spec
+    cd ../core && cargo build --quiet
     ;;
   info)
     cd core && cargo run --quiet
     ;;
-  build)
-    cd compiler && cargo run --quiet --../nephilim.spec
-    cd../core && cargo build --quiet
-    ;;
-  list)
-    ls *.spec | sed 's/\.spec$//'
-    ;;
-  edit)
-    nano "${2:-nephilim}.spec"
-    ;;
-  test)
-    echo "--- Current ---"
-    cd core && cargo run --quiet
-    echo
-    echo "--- φ sweep ---"
-    for phi in 1.5 1.618033988749895 1.75 2.0; do
-      base=$(awk "BEGIN{printf \"%.3f\", 180/$phi}")
-      snap=$(awk "BEGIN{printf \"%.0f\", $base - 20.24611797498107}")
-      printf "φ=%.15f → base=%s° snap=%s°\n" $phi $base $snap
-    done
-    ;;
   *)
-    echo "Nephilim CLI"
-    echo " nephilim switch <name> load spec"
-    echo " nephilim info show current"
-    echo " nephilim build rebuild"
-    echo " nephilim list list specs"
-    echo " nephilim edit [name] edit spec"
-    echo " nephilim test φ-driven test"
+    echo "usage: nephilim switch|build|info"
     ;;
 esac
