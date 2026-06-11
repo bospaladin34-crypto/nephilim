@@ -1,0 +1,9 @@
+WHITESPACE = _{ " " | "\t" | "\r" | "\n" }
+
+manifold = { "MANIFOLD" ~ ident ~ "{" ~ section* ~ "}" }
+section = { ident ~ "{" ~ pair_list ~ "}" }
+pair_list = { (pair ~ (";" ~ pair)* ~ ";"?)? }
+pair = { ident ~ "=" ~ value }
+value = @{ (!(";" | "}") ~ ANY)+ }
+
+ident = @{ (ASCII_ALPHANUMERIC | "-" | "_")+ }

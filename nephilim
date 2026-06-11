@@ -1,0 +1,39 @@
+#!/data/data/com.termux/files/usr/bin/bash
+set -e
+ROOT=~/nephilim
+cd $ROOT
+
+case "$1" in
+  switch)
+    SPEC=${2:-nephilim}
+    cp "${SPEC}.spec" nephilim.spec
+    echo "→ switched to $SPEC"
+    cd compiler && cargo run --quiet --../nephilim.spec
+    echo "✓ Parsed../nephilim.spec"
+    echo "✓ generated../core/src/generated.rs"
+    cd../core && cargo build --quiet
+    echo "✓ core rebuilt with $SPEC"
+    ;;
+  info) cd core && cargo run --quiet ;;
+  build) cd compiler && cargo run --quiet --../nephilim.spec; cd../core && cargo build --quiet; echo "✓ rebuilt" ;;
+  list) echo "Available specs:"; ls *.spec | sed 's/\.spec$//' ;;
+  edit) nano "${2:-nephilim}.spec" ;;
+  test)
+    echo "--- Current ---"; cd core && cargo run --quiet; echo
+    echo "--- φ sweep ---"
+    for phi in 1.5 1.618033988749895 1.75 2.0; do
+      base=$(awk "BEGIN{printf \"%.3f\", 180/$phi}")
+      snap=$(awk "BEGIN{printf \"%.0f\", $base - 20.24611797498107}")
+      printf "φ=%.15f → base=%s° snap=%s°\n" $phi $base $snap
+    done
+    ;;
+  *) cat <<HELP
+Nephilim CLI
+  nephilim switch <name> load spec
+  nephilim info show current
+  nephilim build rebuild
+  nephilim list list specs
+  nephilim edit [name] edit spec
+  nephilim test φ-driven test
+HELP ;;
+esac
