@@ -6,13 +6,14 @@ cd $ROOT
 case "$1" in
   switch)
     SPEC=${2:-nephilim}
-    cp "${SPEC}.spec" nephilim.spec
     echo "→ $SPEC"
-    cd compiler && cargo run --quiet ../nephilim.spec
+    cd compiler && cargo run --quiet ../${SPEC}.spec
     cd ../core && cargo build --quiet
+    echo "$SPEC" > ../.current_spec
     ;;
   build)
-    cd compiler && cargo run --quiet ../nephilim.spec
+    SPEC=$(cat .current_spec 2>/dev/null || echo "nephilim")
+    cd compiler && cargo run --quiet ../${SPEC}.spec
     cd ../core && cargo build --quiet
     ;;
   info)
