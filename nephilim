@@ -1,27 +1,40 @@
 #!/bin/bash
-set -e
 CORE=./core/target/release/nephilim-core
-SPEC_DIR=./specs
+LOG=~/nephilim/ledger.log
 
-cmd=$1; shift || true
-
-case "$cmd" in
+case "$1" in
   switch)
-    name=${1:-vesper}
-    echo "$name.spec" >.current_spec
-    cp "$SPEC_DIR/$name.spec" current.spec 2>/dev/null || true
-    echo "→ $name"
+    echo "$2.spec" >.current_spec
+    echo "→ $2"
     $CORE --info
     ;;
   hash)
+    shift
     $CORE "$@"
+    ;;
+  braid)
+    shift
+    # Artin braid word: e.g. ./nephilim braid "sigma1 sigma2^-1"
+    $CORE --braid "$@"
+    ;;
+  log)
+    shift
+    txt="$*"
+    out=$($CORE "$txt")
+    ts=$(date -Iseconds)
+    echo "[$ts] $txt => $out" | tee -a $LOG
     ;;
   status)
     echo "--- Nephilim Status ---"
-    cat.current_spec 2>/dev/null | xargs echo "spec:"
+    echo "spec: $(cat.current_spec 2>/dev/null)"
     $CORE --info
+    echo "ledger: $(wc -l <$LOG 2>/dev/null || echo 0) entries"
+    ;;
+  serve)
+    echo "API at http://127.0.0.1:5000"
+    python3 server.py
     ;;
   *)
-    echo "usage:./nephilim switch [vesper|nephilim|erdos] | hash <text> | status"
+    echo "usage:./nephilim switch|hash|braid|log|status|serve"
     ;;
 esac
