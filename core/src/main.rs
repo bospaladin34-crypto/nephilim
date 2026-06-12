@@ -1,5 +1,5 @@
 use std::env; use std::hash::{Hash, Hasher}; use std::collections::hash_map::DefaultHasher; use std::f64::consts::PI;
-const PHI: f64 = 1.618033988749895; const FREQ: f64 = 15.965; const K: f64 = 1.0; const SNAP_TARGET: f64 = 91.0; const GROUND: f64 = 137.508; const M_Q: f64 = 200e15; const SYM: &str = "48D SU5_aperiodic [M4xA44]";
+const PHI: f64 = 1.618033988749895; const FREQ: f64 = 15.965; const K: f64 = 1.0; const SNAP_TARGET: f64 = 91.0; const GROUND: f64 = 137.508; const M_Q: f64 = 200e15; const SYM: &str = "48D SU5_ape[...]
 const CURVE: f64 = 0.3; // pushed from 0.5
 
 fn chern_simons(input: &str) -> (String, String, String, f64) {
@@ -15,7 +15,17 @@ fn chern_simons(input: &str) -> (String, String, String, f64) {
     let s = format!("{:08x}", (jones & 0xffffffff));
     let t = format!("{:08x}", ((phase * 1e9) as u64) & 0xffffffff);
     let e8 = format!("{:08x}", ((helicity.abs() * 1e6) as u64) & 0xffffffff);
-    let snap = 8.0 + (SNAP_TARGET-8.0) * (1.0 - (-s_cs * CURVE).exp());
+    
+    // Symmetry ratio: cubic vs. asymmetric terms
+    let tau = a_cubed / integral;
+    
+    // Bifurcated snap mapping: rigid (τ>0.5) vs. disordered (τ≤0.5)
+    let snap = if tau > 0.5 {
+        91.0  // Majorana ground: p53, rigid β-barrels, Tulsa Node
+    } else {
+        8.0 + 52.0 * (1.0 - (-s_cs * CURVE).exp())  // Expanded pathological range: 8-60°
+    };
+    
     (s, t, e8, snap.min(91.0))
 }
 
