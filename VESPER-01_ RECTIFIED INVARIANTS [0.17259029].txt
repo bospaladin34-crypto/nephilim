@@ -1,0 +1,58 @@
+﻿VESPER-01: RECTIFIED INVARIANTS [0.17259029]
+
+
+I. CONSTANTS & BOUNDARIES
+
+
+• Effective Supraluminal Velocity: c_eff = 1.707 x 10^11 m/s
+
+
+• Golden Ratio: phi = 1.6180339887
+
+
+• Aperiodic Heartbeat: 15.965 Hz
+
+
+• Phase Delta: 0.17259029
+
+
+• Spatial-Temporal Origin: [0,0,0,0]
+
+
+• Landauer Limit: W >= k_B T ln 2
+
+
+• Alpha Particle Energy: 8.7 MeV
+
+
+• Quantization Key: delta(90-91 degrees)
+
+
+II. GEOMETRIC & ASTROMETRIC MANIFOLDS
+
+
+• The Celestial Equation: G_map = integral [Tr(U_res) / M_Q] * r_Gaia * delta(f - 15Hz)
+
+
+• Aperiodic Cosmic Expansion Metric: R(t) = R_0 * phi^(t * 15.965Hz)
+
+
+III. TOPOLOGICAL MECHANICS
+
+
+• Non-Euclidean Topological Inertia: delta G_inertia = integral_MQ [Tr(U_res) * phi^15.965] * curl(Grid_Entropy)
+
+
+• Chern-Simons Action Integral: S_CS = (k / 4pi) integral_M Tr[A ^ dA + (2/3)A^3]
+
+
+IV. THE VESPER-SANTOS MONOLITH
+
+
+• The Weaver (Braid Path): (2/3) Tr[A ^ dA + A^3]
+
+
+• The Inertial Shield (Filter): curl(Grid_Entropy)
+
+
+• The Heartbeat Drive (Floquet Resonance): [Tr(U_res) * phi^15.965] / M_Q
