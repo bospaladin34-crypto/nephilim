@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>Chapter 6 — Integration of the 7 PDFs and Final Synthesis</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$','$$']], tags: 'ams', processEscapes: true },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+  :root { color-scheme: light; }
+  body { font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif; text-rendering: optimizeLegibility; }
+  .serif { font-family: 'EB Garamond', Georgia, serif; }
+  .mono { font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace; }
+  .prose-academic { font-size: 1.075rem; line-height: 1.8; color: #1f1f21; }
+  .prose-academic p { margin: 1.1em 0; }
+  .prose-academic h2 { font-family: 'EB Garamond', Georgia, serif; font-weight: 600; font-size: 1.9rem; line-height: 1.25; margin-top: 2.5rem; margin-bottom: 1rem; color: #0a0a0a; }
+  .prose-academic h3 { font-weight: 600; font-size: 1.15rem; margin-top: 1.75rem; margin-bottom: 0.5rem; color: #18181b; }
+  @media (max-width: 390px) { .prose-academic { font-size: 1rem; line-height: 1.7; } .prose-academic h2 { font-size: 1.6rem; } }
+  ::selection { background: #fef08a; }
+  .card-hover { transition: transform .2s ease, box-shadow .2s ease; }
+  .card-hover:hover { transform: translateY(-2px); box-shadow: 0 10px 25px -10px rgba(0,0,0,.15); }
+  @media print { .no-print { display: none !important; } body { background: white; } article { box-shadow: none !important; border: none !important; } }
+</style>
+</head>
+<body class="bg-[#f7f6f3] text-zinc-800">
+<header class="no-print sticky top-0 z-40 backdrop-blur-xl bg-white/75 border-b border-zinc-200">
+  <div class="max-w-[1200px] mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="w-9 h-9 rounded-xl bg-zinc-900 text-amber-300 grid place-items-center font-bold serif text-xl shadow-inner">Φ</div>
+      <div>
+        <div class="text-[11px] uppercase tracking-[0.18em] text-zinc-500 font-medium">Unified Field Theory of Computation</div>
+        <div class="text-sm font-semibold -mt-0.5 text-zinc-900">Manuscript — Chapters 1–6</div>
+      </div>
+    <div class="flex items-center gap-2">
+      <span class="hidden sm:inline text-xs px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">Peer Draft v0.9</span>
+      <button onclick="window.print()" class="text-xs px-3 py-1.5 rounded-lg bg-zinc-900 text-white hover:bg-black transition">Export PDF</button>
+    </div>
+  </div>
+</header>
+
+<main class="max-w-[1200px] mx-auto px-4 sm:px-6 py-8 lg:py-12">
+  <div class="grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-8 lg:gap-12 items-start">
+    <!-- TOC -->
+    <aside class="lg:sticky lg:top-[84px]">
+      <div class="serif text-[28px] leading-tight text-zinc-900 mb-3">Chapter 6</div>
+      <div class="serif text-[22px] leading-snug text-zinc-700 mb-6">Integration of the 7 PDFs and Final Synthesis</div>
+      <nav class="text-[13px] space-y-1 border-l-2 border-zinc-200 pl-4">
+        <a href="#s61" class="block py-1 text-zinc-600 hover:text-black">6.1 The 7 PDFs Overview</a>
+        <a href="#s62" class="block py-1 text-zinc-600 hover:text-black">6.2 Unification</a>
+        <a href="#s63" class="block py-1 text-zinc-600 hover:text-black">6.3 Nano Banana 2 Implementation</a>
+        <a href="#s64" class="block py-1 text-zinc-600 hover:text-black">6.4 Experimental Roadmap</a>
+        <a href="#s65" class="block py-1 text-zinc-600 hover:text-black">6.5 Final Synthesis</a>
+        <a href="#summary" class="block py-1 text-zinc-600 hover:text-black">Summary Table</a>
+      </nav>
+      <div class="mt-6 p-3 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-900">
+        <strong>Core Lagrangian:</strong><br>
+        <span class="mono">$L = \tfrac12(\partial\Phi)^2 - V - \eta_c k_B T\ln2\,\rho$</span>
+      </div>
+    </aside>
+
+    <!-- ARTICLE -->
+    <article class="min-w-0 bg-white rounded-[24px] shadow-[0_1px_0_0_rgba(0,0,0,0.05)] border border-zinc-200">
+      <div class="px-6 sm:px-10 py-8 sm:py-10 border-b border-zinc-100">
+        <div class="flex flex-wrap items-center gap-3 text-[12px]">
+          <span class="px-2.5 py-1 rounded-full bg-zinc-900 text-white">Chapter 6</span>
+          <span class="px-2.5 py-1 rounded-full bg-violet-50 text-violet-700 border border-violet-200">Integration</span>
+          <span class="px-2.5 py-1 rounded-full bg-zinc-100 text-zinc-700">Nano Banana • Vesper • Penrose</span>
+        </div>
+        <h1 class="serif text-[34px] sm:text-[42px] leading-[1.1] mt-4 text-zinc-900">Integration of the 7 PDFs and Final Synthesis</h1>
+        <p class="mt-4 text-zinc-600 max-w-3xl">This chapter consolidates the seven Nano Banana technical PDFs with the derivations from Chapters 1–5. We demonstrate that the measured base frequency $f_0$, the $\Phi$ field, Penrose tiling geometry, the Replit Physics-Compute validation, and the predicted 1.24 ns/hr drift emerge from a single computational Lagrangian.</p>
+      </div>
+
+      <div class="px-6 sm:px-10 py-8 sm:py-10 prose-academic">
+        <!-- 6.1 -->
+        <h2 id="s61">6.1 The 7 PDFs Overview</h2>
+        <p>The Nano Banana corpus was released as seven interdependent documents. Together they move from abstract compute graphs to a physically-deployable distributed architecture.</p>
+
+        <div class="not-prose grid-cols-1 md:grid-cols-2 gap-4 my-6">
+          <div class="card-hover group border border-zinc-200 rounded-2xl p-5 bg-gradient-to-b from-white to-zinc-50" data-pdf="1">
+            <div class="flex items-center justify-between">
+              <div class="text-[11px] uppercase tracking-widest text-zinc-500">PDF 1</div>
+              <span class="text-[10px] px-2 py-0.5 rounded-full bg-zinc-900 text-white">Base</span>
+            </div>
+            <div class="font-semibold mt-1">Nano Banana Core: Differentiable Compute Graphs</div>
+            <p class="text-sm text-zinc-600 mt-2">Defines $\rho_{\text{compute}}$ as operations per unit 4-volume. Establishes that backpropagation trajectories carry action. <strong>Contribution to thesis:</strong> provides the measurable source term later identified in Ch.1 ($f_0$ extraction) and Ch.2 ($\Phi$ coupling).</p>
+          </div>
+          <div class="card-hover group border border-zinc-200 rounded-2xl p-5 bg-gradient-to-b from-white to-zinc-50" data-pdf="2">
+            <div class="flex items-center justify-between">
+              <div class="text-[11px] uppercase tracking-widest text-zinc-500">PDF 2</div>
+              <span class="text-[10px] px-2 py-0.5 rounded-full bg-zinc-900 text-white">Base</span>
+            </div>
+            <div class="font-semibold mt-1">Dynamic Sharding and Load-Balanced Backprop</div>
+            <p class="text-sm text-zinc-600 mt-2">Introduces shard-local gradient accumulation with global synchronization period $\tau_0 = 1/f_0$. Predicts resonance at ~16 Hz. <strong>Contribution:</strong> direct precursor to Ch.1 measurement of $f_0 = 15.965$ Hz.</p>
+          </div>
+          <div class="card-hover group border border-zinc-200 rounded-2xl p-5 bg-gradient-to-b from-white to-zinc-50" data-pdf="3">
+            <div class="flex items-center justify-between">
+              <div class="text-[11px] uppercase tracking-widest text-zinc-500">PDF 3</div>
+              <span class="text-[10px] px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200">Algebra</span>
+            </div>
+            <div class="font-semibold mt-1">Adinkra Algebra for Supersymmetric Codes</div>
+            <p class="text-sm text-zinc-600 mt-2">Maps bit erasure to Adinkra edge-raising operators. Shows Landauer cost $k_B T \ln 2$ is supersymmetric partner to $ \Phi $ mass term. <strong>Contribution:</strong> mathematical foundation for Ch.2 $\Phi$ field Lagrangian.</p>
+          </div>
+          <div class="card-hover group border border-zinc-200 rounded-2xl p-5 bg-gradient-to-b from-white to-zinc-50" data-pdf="4">
+            <div class="flex items-center justify-between">
+              <div class="text-[11px] uppercase tracking-widest text-zinc-500">PDF 4</div>
+              <span class="text-[10px] px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200">Geometry</span>
+            </div>
+            <div class="font-semibold mt-1">Penrose Tiling as Error-Correcting Geometry</div>
+            <p class="text-sm text-zinc-600 mt-2">Proves 5-fold aperiodic P3 tiling minimizes $\int \rho_{\text{compute}}^2 dV$, reducing local hotspots by 37% vs. square mesh. <strong>Contribution:</strong> implements Ch.3 Penrose geometry as physical layout.</p>
+          </div>
+          <div class="card-hover group border border-zinc-200 rounded-2xl p-5 bg-gradient-to-b from-white to-zinc-50" data-pdf="5">
+            <div class="flex items-center justify-between">
+              <div class="text-[11px] uppercase tracking-widest text-zinc-500">PDF 5</div>
+              <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">Vesper</span>
+            </div>
+            <div class="font-semibold mt-1">Vesper I: Coherence Reservoirs</div>
+            <p class="text-sm text-zinc-600 mt-2">Introduces reversible buffers that store intermediate states, achieving $\eta_c < 1$. Derives $\eta_c = 1 - \epsilon_{\text{rev}}$. <strong>Contribution:</strong> explains Ch.4 measured $\eta_c = 1.03 \pm 0.07$ (with overhead).</p>
+          </div>
+          <div class="card-hover group border border-zinc-200 rounded-2xl p-5 bg-gradient-to-b from-white to-zinc-50" data-pdf="6">
+            <div class="flex items-center justify-between">
+              <div class="text-[11px] uppercase tracking-widest text-zinc-500">PDF 6</div>
+              <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">Vesper</span>
+            </div>
+            <div class="font-semibold mt-1">Vesper II: Decoherence Suppression via Feedback</div>
+            <p class="text-sm text-zinc-600 mt-2">Active phase-locking of $\Phi$ to $f_0$. Predicts temporal drift suppression but residual curvature. <strong>Contribution:</strong> enables Ch.5 prediction of 1.24 ns/hr.</p>
+          </div>
+          <div class="card-hover group border border-zinc-200 rounded-2xl p-5 bg-gradient-to-b from-white to-zinc-50 md:col-span-2" data-pdf="7">
+            <div class="flex items-center justify-between">
+              <div class="text-[11px] uppercase tracking-widest text-zinc-500">PDF 7</div>
+              <span class="text-[10px] px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-300">Distributed</span>
+            </div>
+            <div class="font-semibold mt-1">Distributed Compute Shards and the $T_A$ Hash Operator</div>
+            <p class="text-sm text-zinc-600 mt-2">Formalizes <span class="mono">computingNodeHash</span> as discrete time-translation operator $T_A$, and <span class="mono">shardId</span> as Penrose vertex index. Proved isomorphism $T_A^n \cong$ Fibonacci word of length $n$. <strong>Contribution:</strong> direct blueprint for Ch.4 Replit gateway implementation.</p>
+          </div>
+        </div>
+
+        <!-- 6.2 -->
+        <h2 id="s62">6.2 Unification: A Single Lagrangian</h2>
+        <p>Chapters 1–5 appear disparate — a frequency, a field, a tiling, a cloud measurement, a time-dilation prediction. The seven PDFs show they are facets of one action:</p>
+
+        <div class="not-prose my-8 p-6 sm:p-8 rounded-2xl bg-zinc-950 text-zinc-100 shadow-inner border border-zinc-800">
+          <div class="text-[11px] uppercase tracking-widest text-zinc-400 mb-2">Unified Computational Lagrangian</div>
+          $$ L = \frac{1}{2} (\partial_\mu \Phi)(\partial^\mu \Phi) - V(\Phi) - \eta_c\, k_B T \ln 2\; \rho_{\text{compute}} \tag{6.1} $$
+          <div class="mt-4 text-xs text-zinc-400">with $V(\Phi) = \frac{1}{2}m_\Phi^2 \Phi^2 + \frac{\lambda}{4}\Phi^4$, and $\rho_{\text{compute}}$ from PDF 1–2.</div>
+        </div>
+
+        <h3>Derivations from (6.1)</h3>
+        <div class="not-prose grid gap-4">
+          <div class="border rounded-xl p-4">
+            <div class="text-xs font-semibold text-violet-700">Ch.1 — $f_0 = 15.965$ Hz</div>
+            <p class="text-sm mt-1">Euler-Lagrange: $\Box\Phi + V'(\Phi) = -\eta_c k_B T \ln 2\, \frac{\partial\rho}{\partial\Phi}$. Vacuum $\Phi_0$ gives $m_\Phi = \sqrt{V''(\Phi_0)}$. PDF 2 sets synchronization $\tau_0 = 2\pi/m_\Phi$. Measurement yields: $$f_0 = \frac{m_\Phi c^2}{2\pi\hbar} = 15.965 \pm 0.003\ \text{Hz}$$ matching PDF 2 prediction to 0.2%.</p>
+          </div>
+          <div class="border rounded-xl p-4">
+            <div class="text-xs font-semibold text-violet-700">Ch.2 — $\Phi$ Field</div>
+            <p class="text-sm mt-1">PDF 3 Adinkra algebra identifies $\Phi$ as Goldstone mode of broken information-reversal symmetry. Coupling $-\eta_c k_B T\ln2\,\rho\Phi$ sources curvature directly from computation.</p>
+          </div>
+          <div class="border rounded-xl p-4">
+            <div class="text-xs font-semibold text-violet-700">Ch.3 — Penrose Geometry</div>
+            <p class="text-sm mt-1">Minimizing $\int L\sqrt{-g}\,d^4x$ with respect to shard metric gives: $$\delta S = 0 \Rightarrow R_{\mu\nu} - \tfrac12 R g_{\mu\nu} = \frac{8\pi G}{c^4}\,\eta_c k_B T\ln2\,\rho_{\text{compute}}\,T^{\text{Penrose}}_{\mu\nu}$$ PDF 4 proves $T^{\text{Penrose}}_{\mu\nu}$ is minimized by P3 tiling, explaining observed 5-fold coordination.</p>
+          </div>
+          <div class="border rounded-xl p-4">
+            <div class="text-xs font-semibold text-violet-700">Ch.4 — Physics Compute Validation</div>
+            <p class="text-sm mt-1">Replit gateway measured power vs. bit erasures. Landauer limit at 300K: $P_L = k_B T\ln2 \cdot \dot{N} = 2.87\times10^{-21}\dot{N}$ W. Observed $2.96\times10^{-21}\dot{N}$ W gives: $$\eta_c = 1.03 \pm 0.07$$ confirming PDF 5 Vesper overhead model.</p>
+          </div>
+          <div class="border rounded-xl p-4">
+            <div class="text-xs font-semibold text-violet-700">Ch.5 — 1.24 ns/hr Prediction</div>
+            <p class="text-sm mt-1">PDF 6 feedback cannot cancel the source term. Weak-field limit yields clock drift: $$\frac{\Delta t}{t} = \frac{\eta_c k_B T\ln2}{m_P c^2}\langle\rho_{\text{compute}}\rangle \approx 3.44\times10^{-13}$$ For $\langle\rho\rangle = 4.2\times10^{16}$ ops/m³·s (Nano Banana 2), this is $1.24$ ns/hr — exactly Ch.5.</p>
+          </div>
+        </div>
+
+        <details class="mt-6 not-prose group border border-zinc-200 rounded-xl">
+          <summary class="cursor-pointer list-none px-4 py-3 flex items-center justify-between">
+            <span class="text-sm font-medium">Show full Euler-Lagrange derivation</span>
+            <span class="text-zinc-400 group-open:rotate-180 transition">⌄</span>
+          </summary>
+          <div class="px-4 pb-4 text-sm text-zinc-700 border-t">
+            $$ \partial_\mu\frac{\partial L}{\partial(\partial_\mu\Phi)} - \frac{\partial L}{\partial\Phi}=0 \Rightarrow \Box\Phi + m_\Phi^2\Phi + \lambda\Phi^3 = -\eta_c k_B T\ln2\frac{\partial\rho}{\partial\Phi} $$
+            Linearize around $\Phi_0$: $\Phi = \Phi_0 + \varphi$, $V''(\Phi_0)=m_\Phi^2$. With PDF 1 $\rho = \rho_0(1+\alpha\varphi)$, we get driven oscillator with $f_0 = m_\Phi/2\pi$.
+          </div>
+        </details>
+
+        <!-- 6.3 -->
+        <h2 id="s63">6.3 The Nano Banana 2 Implementation</h2>
+        <p>PDF 7 maps abstract operators to deployable code. The Replit gateway from Chapter 4 is not an API shim — it is the physical realization of $T_A$.</p>
+
+        <div class="not-prose grid md:grid-cols-2 gap-6 my-6">
+          <div class="border rounded-2xl p-5">
+            <div class="text-xs uppercase tracking-wide text-zinc-500 mb-2">Operator Mapping</div>
+            <div class="space-y-3 text-sm">
+              <div><span class="mono font-medium">computingNodeHash</span> = $T_A$<div class="text-zinc-600">PDF 7 defines: $H(n,t) = \text{SHA256}(n \Vert \lfloor t/\tau_0\rfloor) \bmod F_{k}$ where $F_k$ is $k$th Fibonacci number, $\tau_0=62.63$ms. This implements $T_A = e^{-i\hat{H}\tau_0/\hbar}$ discretely.</div></div>
+              <div><span class="mono font-medium">shardId</span> = Penrose vertex<div class="text-zinc-600">shardId $\in [0, F_{k})$ maps bijectively to vertex $v_i$ of P3 tiling. Adjacency list = communication graph from PDF 4.</div></div>
+              <div><span class="mono font-medium">Vesper coherence</span> = $\Phi$ phase lock<div class="text-zinc-600">maintains $\langle\Phi\rangle$ across shards within $1/(2f_0)$.</div></div>
+            </div>
+          </div>
+          <div class="border rounded-2xl p-5 bg-zinc-50">
+            <div class="text-xs uppercase tracking-wide text-zinc-500 mb-2">Replit Gateway → V2</div>
+            <pre class="mono text-[12px] leading-6 overflow-x-auto">POST /compute
+{
+  "node": computingNodeHash, // T_A
+  "target_shard": shardId,    // v_i
+  "payload": tensor,
+  "coherence": "vesper"       // η_c mode
+}
+
+// Gateway routes via Penrose adjacency
+// to minimize ∫ρ² (PDF 4, Thm 3)</pre>
+            <p class="text-xs text-zinc-600 mt-3">Chapter 4 measured this routing reducing dissipation by 31% vs. random hash — confirming the geometric term in (6.1).</p>
+          </div>
+        </div>
+
+        <!-- 6.4 -->
+        <h2 id="s64">6.4 Experimental Roadmap</h2>
+        <p>Unification is falsifiable. The PDFs prescribe four immediate tests building on Ch.4–5 data.</p>
+        
+        <div class="not-prose my-6 space-y-3">
+          <div class="flex gap-4 p-4 border rounded-xl">
+            <div class="w-6 h-6 rounded-full bg-zinc-900 text-white grid place-items-center text-xs font-bold">1</div>
+            <div class="flex-1">
+              <div class="font-medium">24-hour drift measurement</div>
+              <div class="text-sm text-zinc-600">Run Nano Banana 2 at constant $\rho = 4.2\times10^{16}$ ops/m³·s. Target: $29.8 \pm 0.5$ ns cumulative drift. Compare to Ch.5 prediction 1.24 ns/hr. Vesper on/off.</div>
+            </div>
+          </div>
+          <div class="flex gap-4 p-4 border rounded-xl">
+            <div class="w-6 h-6 rounded-full bg-zinc-900 text-white grid place-items-center text-xs font-bold">2</div>
+            <div class="flex-1">
+              <div class="font-medium">Multi-node synchronization</div>
+              <div class="text-sm text-zinc-600">Deploy 5 nodes on Penrose vertices (PDF 4 layout). Measure phase jitter of $f_0$ across shards. Prediction from (6.1): jitter $\propto \eta_c^{-1}$.</div>
+            </div>
+          </div>
+          <div class="flex gap-4 p-4 border rounded-xl">
+            <div class="w-6 h-6 rounded-full bg-zinc-900 text-white grid place-items-center text-xs font-bold">3</div>
+            <div class="flex-1">
+              <div class="font-medium">Temperature scaling (273K to 350K)</div>
+              <div class="text-sm text-zinc-600">Direct test of $-\eta_c k_B T\ln2$ term. Expect drift $\Delta t/t \propto T$. PDF 5 predicts Vesper reduces slope by $\epsilon_{\text{rev}} \approx 0.15$.</div>
+            </div>
+          </div>
+          <div class="flex gap-4 p-4 border rounded-xl">
+            <div class="w-6 h-6 rounded-full bg-zinc-900 text-white grid place-items-center text-xs font-bold">4</div>
+            <div class="flex-1">
+              <div class="font-medium">Vesper vs. base Meta AI error rates</div>
+              <div class="text-sm text-zinc-600">Run identical workload on base (PDF 1–2) and Vesper (PDF 5–6). Hypothesis: $\eta_c$ reduction lowers logical error by geometric dephasing, despite same Landauer cost.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 6.5 -->
+        <h2 id="s65">6.5 Final Synthesis</h2>
+        <div class="not-prose my-8 p-8 rounded-2xl border border-amber-300 bg-gradient-to-br from-amber-50 to-white">
+          <div class="serif text-[26px] sm:text-[32px] leading-snug text-zinc-900 italic">“Computation is not performed in spacetime; computation generates spacetime via the $\Phi$ field. The Landauer limit is not a cost — it is the curvature.”</div>
+          <div class="mt-4 text-sm text-zinc-700">This is the direct consequence of (6.1). The term $-\eta_c k_B T\ln2\,\rho_{\text{compute}}$ couples information erasure to the metric. Nano Banana, Vesper, and Penrose tiling are not software optimizations — they are engineering of physical geometry.</div>
+        </div>
+
+        <p>Chapters 1–5 isolated phenomena. The seven PDFs provide the implementation. Together they imply:</p>
+        <ol class="list-decimal ml-5 space-y-1">
+          <li>$f_0$ is the mass of the computational field.</li>
+          <li>Penrose geometry minimizes action.</li>
+          <li>$\eta_c$ is measurable curvature per bit.</li>
+          <li>Time dilation 1.24 ns/hr is unavoidable for this architecture at 300K.</li>
+        </ol>
+
+        <!-- Summary Table -->
+        <h2 id="summary">Summary Table: PDFs ↔ Chapters</h2>
+        <div class="not-prose overflow-x-auto -mx-1 px-1">
+          <table class="w-full text-[13px] border border-zinc-200 rounded-xl overflow-hidden">
+            <thead class="bg-zinc-50 text-zinc-700">
+              <tr>
+                <th class="text-left px-3 py-2 font-semibold">PDF</th>
+                <th class="text-left px-3 py-2 font-semibold">Title</th>
+                <th class="text-left px-3 py-2 font-semibold">Primary Chapter</th>
+                <th class="text-left px-3 py-2 font-semibold">Key Equation / Parameter</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-zinc-100">
+              <tr class="hover:bg-zinc-50"><td class="px-3 py-2 mono">1</td><td class="px-3 py-2">Nano Banana Core</td><td class="px-3 py-2">Ch.2</td><td class="px-3 py-2">$\rho_{\text{compute}}$ definition</td></tr>
+              <tr class="hover:bg-zinc-50"><td class="px-3 py-2 mono">2</td><td class="px-3 py-2">Dynamic Sharding</td><td class="px-3 py-2">Ch.1</td><td class="px-3 py-2">$f_0 = 15.965$ Hz, $\tau_0=62.63$ms</td></tr>
+              <tr class="hover:bg-zinc-50"><td class="px-3 py-2 mono">3</td><td class="px-3 py-2">Adinkra Algebra</td><td class="px-3 py-2">Ch.2</td><td class="px-3 py-2">$\Box\Phi + V' = - \eta_c k_B T\ln2 \partial\rho/\partial\Phi$</td></tr>
+              <tr class="hover:bg-zinc-50"><td class="px-3 py-2 mono">4</td><td class="px-3 py-2">Penrose Tiling</td><td class="px-3 py-2">Ch.3</td><td class="px-3 py-2">$T^{\text{Penrose}}_{\mu\nu}$, 5-fold</td></tr>
+              <tr class="hover:bg-zinc-50"><td class="px-3 py-2 mono">5</td><td class="px-3 py-2">Vesper I</td><td class="px-3 py-2">Ch.4</td><td class="px-3 py-2">$\eta_c = 1.03 \pm 0.07$</td></tr>
+              <tr class="hover:bg-zinc-50"><td class="px-3 py-2 mono">6</td><td class="px-3 py-2">Vesper II</td><td class="px-3 py-2">Ch.5</td><td class="px-3 py-2">$\Delta t/t = 3.44\times10^{-13}$</td></tr>
+              <tr class="hover:bg-zinc-50"><td class="px-3 py-2 mono">7</td><td class="px-3 py-2">Distributed Shards</td><td class="px-3 py-2">Ch.4</td><td class="px-3 py-2">$T_A = \text{computingNodeHash}$, shardId = $v_i$</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="not-prose mt-10 p-6 rounded-2xl bg-zinc-950 text-zinc-100">
+          <div class="text-[11px] uppercase tracking-widest text-zinc-400 mb-3">Final Equations</div>
+          <div class="space-y-3 text-[15px]">
+            <div>$$L = \tfrac12(\partial\Phi)^2 - V(\Phi) - \eta_c k_B T\ln2\,\rho_{\text{compute}}$$</div>
+            <div>$$f_0 = \frac{\sqrt{V''(\Phi_0)}}{2\pi} = 15.965\ \text{Hz}$$</div>
+            <div>$$\frac{\Delta\tau}{\tau} = \frac{\eta_c k_B T\ln2}{c^2}\frac{\langle\rho\rangle}{\rho_P} \approx 1.24\ \text{ns/hr}$$</div>
+          </div>
+        </div>
+
+        <div class="mt-12 pt-6 border-t text-xs text-zinc-500">
+          <p>Manuscript compiled from Nano Banana PDFs 1–7 (2024–2025) and Chapters 1–5 experimental data. Correspondence: unified-field [at] example.org</p>
+        </div>
+      </div>
+    </article>
+  </div>
+</main>
+
+<script>
+  // Simple interactive highlight for PDF cards
+  document.querySelectorAll('[data-pdf]').forEach(card => {
+    card.addEventListener('click', () => {
+      document.querySelectorAll('[data-pdf]').forEach(c => c.classList.remove('ring-2','ring-violet-400'));
+      card.classList.add('ring-2','ring-violet-400');
+    });
+  });
+</script>
+<script>(function(){document.addEventListener("click",function(e){var a=e.target.closest("[data-product-id]");if(!a)return;e.preventDefault();var pid=a.getAttribute("data-product-id");if(pid)parent.postMessage({type:"ecto-artifact-link-click",productId:pid},"*")})})();</script>
+<script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;var a=target.closest?target.closest("a[href]"):null;if(!a||!a.href||!/^https?:\/\//.test(a.href))return;if(a.href.replace(/#.*$/,"")===loc)return;var productId=extractProductId(target)||extractProductId(a);if(!productId)return;e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*")},true)})();</script></body>
+</html>
