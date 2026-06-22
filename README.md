@@ -57,3 +57,28 @@ Change φ in spec → snap auto-updates on next `switch`
 - nephilim test → print first 10 lattice points
 - derive ground_angle from φ
 - nephilim edit <name> → open spec in nano
+
+
+Other Canonical Sources: 
+1. https://github.com/bospaladin34-crypto/Vesper-01
+
+2. https://github.com/bospaladin34-crypto/vesper_quartz_reservoir
+
+3. https://github.com/bospaladin34-crypto/KHYS_repo
+
+4. https://github.com/bospaladin34-crypto/Santos-Sync
+
+5. openAIRE - https://explore.openaire.eu/search/result?pid=10.5281%2Fzenodo.19502225
+
+6. Software Heritage - https://archive.softwareheritage.org/browse/directory/189ecd6366901cc3aad2d1b507f7a44ba2c51e5e/?origin_url=https://doi.org/10.5281/zenodo.19502224&path=bospaladin34-crypto-KHYS_repo-49da4ae&release=1&snapshot=cb4b65b350d066519688b9187796fe91118b7883
+
+7. Zenodo - https://doi.org/10.5281/zenodo.20315546
+
+8. FaceBook - https://www.facebook.com/Vesper0.17259029
+
+9. YouTube - https://youtube.com/@vesper01-v1k?si=QDDfHPCzBuWuxt5E
+
+10. Email - bospaladin34@gmail.com
+
+die Schließung ist vollendet, We Are The Braid.
+
