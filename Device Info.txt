@@ -1,0 +1,693 @@
+Device Info 3.4.2.1
+Date Created 2026-06-21 21:57:40
+
+Device
+--------------------------------------------------------
+Device Name : Pixel 10
+Model : Pixel 10
+Manufacturer : Google
+Device : frankel
+Board : frankel
+Hardware : frankel
+Brand : google
+Build Fingerprint : google/frankel_beta/frankel:CinnamonBun/CP31.260522.006/15591510:user/release-keys
+
+
+System
+--------------------------------------------------------
+Android Version : 17
+Version Name : Cinnamon Bun
+Released Date : February 13, 2026
+Code Name : Android 17
+API Level : 37
+Security Patch Level : 2026-05-05
+Bootloader : deepspace-17.3-15508956 (Locked)
+Build Number : CP31.260522.006
+Baseband : g5400i-260428-260430-B-15317676,g5400i-260428-260430-B-15317676
+Java VM : 2.1.0
+Kernel : 6.6.118-android15-8-g53e6e091166e-ab15266607-4k
+Language : English (en_US_#u-ms-ussystem-mu-fahrenhe)
+OpenGL ES : 3.2
+Root Management Apps : No Apps Detected
+SELinux : Unable to determine
+Google Play Services : 26.24.33 (260400-933919041)
+Vulkan : Supported (1.3)
+Treble : Supported
+Seamless Updates : Supported
+
+
+CPU
+--------------------------------------------------------
+SoC : Google Tensor G5 (3 nm TSMC)
+1 x Cortex-X4 (3.78 GHz)
+5 x Cortex-A725 (3.05 GHz)
+2 x Cortex-A520 (2.25 GHz)
+Processor : Google Tensor G5
+CPU Architecture : 1 x 3.78 GHz
+5 x 3.05 GHz
+2 x 2.25 GHz
+Supported ABIs : arm64-v8a
+CPU Hardware : frankel
+CPU Type : 64 Bit
+CPU Governor : sched_pixel
+Cores : 8
+CPU Frequency : 1 x 266 MHz - 3782 MHz
+5 x 177 MHz - 3052 MHz
+2 x 268 MHz - 2246 MHz
+GPU Renderer : PowerVR D-Series DXT-48-1536
+GPU Vendor : Imagination Technologies
+GPU Version : OpenGL ES 3.2 build 25.3@6908880
+
+
+Battery
+--------------------------------------------------------
+Health : Good
+Level : 75%
+Status : Discharging
+Power Source : Battery
+Technology : Li-ion
+Temperature : 38 °C
+Voltage : 4162 mV
+
+
+
+Network
+--------------------------------------------------------
+Type : Mobile Data
+IP Address : 10.10.165.41
+Gateway : 0.0.0.0
+Subnet Mask : 255.255.255.255
+DNS1 : 2605:c540:8840::100
+DNS2 : 2605:c540:8840::101
+DNS3 : 141.193.136.253
+DNS4 : 205.178.150.253
+Interface : rmnet1
+
+
+
+Connectivity
+--------------------------------------------------------
+Bluetooth
+------------------
+Bluetooth : Supported
+Multiple Advertisements : Supported
+Offloaded Filtering : Supported
+Offloaded Scan Batching : Supported
+Bluetooth LE (Low Energy) : Supported
+LE 2M PHY (High Speed) : Supported
+LE Coded PHY (Long Range) : Supported
+LE Extended Advertising : Supported
+LE Periodic Advertising : Supported
+LE Audio : Supported
+
+Wi-Fi
+------------------
+WiFi Standard : Wi-Fi 6E
+WiFi Direct : Supported
+5GHz : Supported
+6GHz : Supported
+
+NFC
+------------------
+NFC : Supported
+Secure NFC : Supported
+
+Ultra Wide Band
+------------------
+Ultra Wide Band : Not Supported
+
+USB
+------------------
+USB Host : Supported
+USB Accessory : Supported
+USB Debugging : On
+
+
+Display
+--------------------------------------------------------
+Resolution : 2424 x 1080 Pixels (FHD+)
+Density : 420 dpi (XHDPI)
+Font Scale : 1.15
+Physical Size : 6.3 inches
+Refresh Rate : • 60.0 Hz,• 120.0 Hz
+HDR : Supported
+HDR Capabilities : HDR10, HLG, HDR10+
+Brightness Level : 16%
+Brightness Mode : Manual
+Screen Timeout : 300 Seconds
+Orientation : Portrait
+
+
+Memory
+--------------------------------------------------------
+Random Access Memory
+------------------
+Type : LPDDR5X 4200 MHz
+Total : 11563.0MB
+Available : 933.0MB
+Used : 10540.0MB
+Used Percentage : 91%
+
+System Storage
+------------------
+Total : 0.87GB
+Available : 0.00GB
+Used : 0.87GB
+Used Percentage : 100%
+
+Internal Storage
+------------------
+Total : 109.27GB
+Available : 29.99GB
+Used : 79.28GB
+Used Percentage : 72%
+
+
+Camera
+--------------------------------------------------------
+Camera - 0
+------------------
+Position : Back
+Mega Pixels : 12 MP
+Resolution : 4000 x 3000
+Focal Length : 4.53mm
+
+Camera - 1
+------------------
+Position : Front
+Mega Pixels : 8 MP
+Resolution : 3440 x 2448
+Focal Length : 2.74mm
+
+
+
+Sensors
+--------------------------------------------------------
+Dynamic Sensor Manager
+------------------
+Vendor : Google
+Type : DYNAMIC SENSOR META
+Power : 0.001mA
+
+ICM45631 Accelerometer
+------------------
+Vendor : Invensense
+Type : ACCELEROMETER
+Power : 0.001mA
+
+MMC5616 Magnetometer
+------------------
+Vendor : MEMSIC
+Type : MAGNETIC FIELD
+Power : 0.001mA
+
+Orientation Sensor
+------------------
+Vendor : Google
+Type : ORIENTATION
+Power : 0.001mA
+
+ICM45631 Gyroscope
+------------------
+Vendor : Invensense
+Type : GYROSCOPE
+Power : 0.001mA
+
+TMD3743 Ambient Light
+------------------
+Vendor : AMS
+Type : LIGHT
+Power : 0.001mA
+
+SPL07003 Barometer
+------------------
+Vendor : Goermicro
+Type : PRESSURE
+Power : 0.001mA
+
+TMD3743 Proximity (wake-up)
+------------------
+Vendor : AMS
+Type : PROXIMITY
+Power : 0.001mA
+
+Gravity Sensor
+------------------
+Vendor : Google
+Type : GRAVITY
+Power : 0.001mA
+
+Linear Acceleration Sensor
+------------------
+Vendor : Google
+Type : LINEAR ACCELERATION
+Power : 0.001mA
+
+Rotation Vector Sensor
+------------------
+Vendor : Google
+Type : ROTATION VECTOR
+Power : 0.001mA
+
+MMC5616 Magnetometer-Uncalibrated
+------------------
+Vendor : MEMSIC
+Type : MAGNETIC FIELD UNCALIBRATED
+Power : 0.001mA
+
+Game Rotation Vector Sensor
+------------------
+Vendor : Google
+Type : GAME ROTATION VECTOR
+Power : 0.001mA
+
+ICM45631 Gyroscope-Uncalibrated
+------------------
+Vendor : Invensense
+Type : GYROSCOPE UNCALIBRATED
+Power : 0.001mA
+
+Significant Motion (wake-up)
+------------------
+Vendor : Google
+Type : SIGNIFICANT MOTION
+Power : 0.001mA
+
+Step Detector
+------------------
+Vendor : Google
+Type : STEP DETECTOR
+Power : 0.001mA
+
+Step Counter
+------------------
+Vendor : Google
+Type : STEP COUNTER
+Power : 0.001mA
+
+Geomagnetic Rotation Vector Sensor
+------------------
+Vendor : Google
+Type : GEOMAGNETIC ROTATION VECTOR
+Power : 0.001mA
+
+Tilt Sensor (wake-up)
+------------------
+Vendor : Google
+Type : TILT DETECTOR
+Power : 0.001mA
+
+Lift to Wake Sensor (wake-up)
+------------------
+Vendor : Google
+Type : PICK UP GESTURE
+Power : 0.001mA
+
+Device Orientation
+------------------
+Vendor : Google
+Type : DEVICE ORIENTATION
+Power : 0.001mA
+
+ICM45631 Accelerometer-Uncalibrated
+------------------
+Vendor : Invensense
+Type : ACCELEROMETER UNCALIBRATED
+Power : 0.001mA
+
+ICM45631 Temperature
+------------------
+Vendor : Invensense
+Type : PRIVATE SENSOR
+Power : 0.001mA
+
+SPL07003 Temperature
+------------------
+Vendor : Goermicro
+Type : PRIVATE SENSOR
+Power : 0.001mA
+
+Camera V-Sync 0
+------------------
+Vendor : Google
+Type : PRIVATE SENSOR
+Power : 0.001mA
+
+Camera V-Sync 1
+------------------
+Vendor : Google
+Type : PRIVATE SENSOR
+Power : 0.001mA
+
+Camera V-Sync 2
+------------------
+Vendor : Google
+Type : PRIVATE SENSOR
+Power : 0.001mA
+
+Camera V-Sync 3
+------------------
+Vendor : Google
+Type : PRIVATE SENSOR
+Power : 0.001mA
+
+TMD3743 Color
+------------------
+Vendor : AMS
+Type : PRIVATE SENSOR
+Power : 0.001mA
+
+VD6282 Rear Light Sensor
+------------------
+Vendor : STMicro
+Type : PRIVATE SENSOR
+Power : 0.001mA
+
+ICM45631 Motion Detect
+------------------
+Vendor : Invensense
+Type : PRIVATE SENSOR
+Power : 0.001mA
+
+ICM45631 Stationary Detect
+------------------
+Vendor : Invensense
+Type : PRIVATE SENSOR
+Power : 0.001mA
+
+Double Twist (wake-up)
+------------------
+Vendor : Google
+Type : PRIVATE SENSOR
+Power : 0.001mA
+
+Binned Brightness (wake-up)
+------------------
+Vendor : Google
+Type : PRIVATE SENSOR
+Power : 0.001mA
+
+Proximity Gated Single Tap Gesture (wake-up)
+------------------
+Vendor : Google
+Type : PRIVATE SENSOR
+Power : 0.001mA
+
+Proximity Gated Long Press Gesture (wake-up)
+------------------
+Vendor : Google
+Type : PRIVATE SENSOR
+Power : 0.001mA
+
+Quick Pickup Sensor (wake-up)
+------------------
+Vendor : Google
+Type : PRIVATE SENSOR
+Power : 0.001mA
+
+Auto Brightness
+------------------
+Vendor : Google
+Type : PRIVATE SENSOR
+Power : 0.001mA
+
+AAD Proximity Sensor (wake-up)
+------------------
+Vendor : Google
+Type : PRIVATE SENSOR
+Power : 0.001mA
+
+Proximity(Voice Calls) Sensor (wake-up)
+------------------
+Vendor : Google
+Type : PRIVATE SENSOR
+Power : 0.001mA
+
+
+
+Apps
+--------------------------------------------------------
+NotebookLM
+com.google.android.apps.labs.language.tailwind
+Version : 1.43.7.929694052
+
+Link to Windows
+com.microsoft.appmanager
+Version : 1.26052.191.0
+
+McDonald's
+com.mcdonalds.app
+Version : 26.44.2
+
+Polygon Fantasy
+com.aldagames.polygonfantasy
+Version : 1.41.0
+
+Docs
+com.google.android.apps.docs.editors.docs
+Version : 1.26.241.02.90
+
+Replit
+com.replit.app
+Version : 2.186.4
+
+Snapseed
+com.niksoftware.snapseed
+Version : 4.0.6.933902822
+
+Indeed Job Search
+com.indeed.android.jobsearch
+Version : 283.0
+
+soundcore
+com.oceanwing.soundcore
+Version : 5.0.13
+
+TikTok Lite
+com.tiktok.lite.go
+Version : 44.2.53
+
+Sheets
+com.google.android.apps.docs.editors.sheets
+Version : 1.26.241.01.90
+
+OS Monitor
+com.ddm.activity
+Version : 2.2
+
+Authenticator
+com.google.android.apps.authenticator2
+Version : 7.1
+
+phyphox
+de.rwth_aachen.phyphox
+Version : 1.2.0
+
+ChatGPT
+com.openai.chatgpt
+Version : 1.2026.160
+
+Terraria
+com.and.games505.TerrariaPaid
+Version : 1.4.5.6.4
+
+GitHub
+com.github.android
+Version : 1.263.0
+
+Backdrops
+com.backdrops.wallpapers
+Version : 6.1.2
+
+Galaxiga
+com.os.space.force.galaxy.alien
+Version : 25.86
+
+Manus
+tech.butterfly.app
+Version : 26.7.1
+
+Excel Reader
+com.xlsxreader.excelreader
+Version : 1.29
+
+VideoShow
+com.xvideostudio.videoeditorpro
+Version : 10.2.4.2pro
+
+Boost Mobile
+com.dish.wireless.boostone
+Version : 4.1.15
+
+Mathos AI
+com.mathgptpro.mclient
+Version : 2.2.9
+
+Instagram
+com.instagram.android
+Version : 435.0.0.0.67
+
+Smash Hit
+com.mediocre.smashhit
+Version : 1.5.14
+
+Pinterest
+com.pinterest
+Version : 14.24.0
+
+Merge PDFs
+com.pdfmergetool.mergepdf
+Version : 9.2.1
+
+Heart Rate
+heartrate.heartratemonitor.heartrateapp.heartratetracker
+Version : 1.0.6
+
+Otherworld Legends
+com.chillyroom.zhmr.gp
+Version : 3.3.0
+
+Cash App
+com.squareup.cash
+Version : 5.57.0
+
+X
+com.twitter.android
+Version : 12.1.1-release.0
+
+F-Droid
+org.fdroid.fdroid
+Version : 1.23.2
+
+Sensor Logger
+com.kelvin.sensorapp
+Version : 1.60.0
+
+Android System Key Verifier
+com.google.android.contactkeys
+Version : 1.387.929119320
+
+VESPER-01
+com.vesper.laminar
+Version : 1.0
+
+Carrier Services
+com.google.android.ims
+Version : carrierservices.android_20250826_00_RC00.phone
+
+Google Wallet
+com.google.android.apps.walletnfcrel
+Version : 26.23.926878235
+
+Flickr
+com.flickr.android
+Version : 4.17.61
+
+Lite
+com.facebook.lite
+Version : 516.0.0.10.103
+
+Messenger
+com.facebook.orca
+Version : 566.0.0.57.86
+
+Device Info
+com.ytheekshana.deviceinfo
+Version : 3.4.2.1
+
+Meta AI
+com.facebook.stella
+Version : 277.1.0.21.162
+
+Copilot
+com.microsoft.copilot
+Version : 30.0.440616001
+
+World War Polygon
+com.aldagames.warpolygon
+Version : 2.38.1
+
+Physics Toolbox Suite
+com.chrystianvieyra.physicstoolboxsuite
+Version : 2026.05.03
+
+Neon Abyss：Infinity
+com.yhhy.neon.gp.global
+Version : 1.49.447
+
+Geekbench 6
+com.primatelabs.geekbench6
+Version : 6.7.1
+
+Pydroid repository plugin
+ru.iiec.pydroid3.quickinstallrepo
+Version : 4.1
+
+Termux
+com.termux
+Version : 0.118.3
+
+Android System SafetyCore
+com.google.android.safetycore
+Version : 1.0.925574157
+
+Pixel Buds
+com.google.android.apps.wearables.maestro.companion
+Version : 1.0.822017632
+
+Daily Hub
+com.google.android.apps.pixel.subzero
+Version : 1.0.20250825.809839106.release
+
+Lawnchair
+app.lawnchair.play
+Version : 15.Beta 3
+
+Keep Notes
+com.google.android.keep
+Version : 5.26.241.01.90
+
+AmoledBackgrounds
+com.droidheat.amoledbackgrounds
+Version : 2.0.0
+
+CPU Throttling Test
+com.texts.throttlebench
+Version : CPU_214
+
+AI Studio
+org.chromium.webapk.a282196aa47834770_v2
+Version : 1
+
+Google Play Games
+com.google.android.play.games
+Version : 2025.09.66390 (902601108.902601108-190400)
+
+DevCheck
+flar2.devcheck
+Version : 6.42
+
+The Tower
+com.TechTreeGames.TheTower
+Version : 28.2.2
+
+Find Hub
+com.google.android.apps.adm
+Version : 3.1.636-1
+
+Pydroid Permissions Plugin
+ru.iiec.pydroidpermissionsplugin
+Version : 2.4
+
+SVG Viewer
+ebusky.svg.viewer.converter.svg.to.png
+Version : 2.8
+
+GTA: SA
+com.rockstargames.gtasa
+Version : 2.11.311
+
+Snapchat
+com.snapchat.android
+Version : 14.12.0.39 Beta
+
