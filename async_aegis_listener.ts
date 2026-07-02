@@ -117,7 +117,7 @@ async function spawnDirigibleEvolutionLoop() {
   let evolutionEpoch = 2222; 
   let runningBestLogMetric = 50.1205; 
   let consecutiveRejections = 0;
-  let baseExplorationRadius = 0.05;
+  let baseExplorationRadius = 0.0425;
 
   while (true) {
     await new Promise((resolve) => setTimeout(resolve, 7000));
