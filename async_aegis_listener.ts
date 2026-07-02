@@ -42,7 +42,7 @@ async function runShellWithFeedback(cmd: string[], context: string): Promise<boo
   }
 }
 
-// SYSTEM SYNC: Remote Git Broadcast Engine targeting 'master' branch
+// SYSTEM SYNC: Remote Git Broadcast Engine targeting 'master' branch explicitly
 async function broadcastToRemoteLedger(message: string) {
   console.log(`\n[GITHUB SYNC] Initiating remote synchronization sequence...`);
   
@@ -105,15 +105,19 @@ async function spawnAegisPollingWatcher() {
 // CHANNEL 2: Autonomous Evolutionary Optimization Matrix
 async function spawnDirigibleEvolutionLoop() {
   console.log("[INITIALIZATION] Synchronizing local Git environment state...");
-  await runShellWithFeedback(["git", "init", "-b", "master"], "Git Initialization");
+  await runShellWithFeedback(["git", "init"], "Git Initialization");
+  
+  // FIX: Structural branch force-rename to eliminate the 'src refspec master does not match any' discrepancy
+  await runShellWithFeedback(["git", "branch", "-M", "master"], "Branch Name Alignment");
+  
   await runShellWithFeedback(["git", "remote", "remove", "origin"], "Pruning Old Remote");
   await runShellWithFeedback(["git", "remote", "add", "origin", gitRepoUrl], "Binding Current Origin");
 
   // BOOT FLUSH: Instant push to confirm connectivity before starting the evolution math loop
   await broadcastToRemoteLedger("infra: initialize live autopoiesis network pipeline");
 
-  let evolutionEpoch = 2218; 
-  let runningBestLogMetric = 50.0832; // Seamless resumption from your latest terminal state frame
+  let evolutionEpoch = 2221; 
+  let runningBestLogMetric = 50.1205; // Seamless continuation from your latest verified metric line
   let consecutiveRejections = 0;
   let baseExplorationRadius = 0.05;
 
@@ -156,7 +160,7 @@ async function spawnDirigibleEvolutionLoop() {
       try {
         await Deno.writeTextFile(targetTensorFile, selfAuthoredDelta + "\n", { append: true });
         
-        // LIVE PUSH: Fire an update instantly when optimizations pass
+        // LIVE PUSH: Fires automatically when optimization updates pass gating criteria
         await broadcastToRemoteLedger(`autopoiesis: step passed at epoch ${evolutionEpoch} (log metric ${runningBestLogMetric.toFixed(4)})`);
       } catch (err) { console.error("Write error:", err); }
     } else {
@@ -169,7 +173,7 @@ async function spawnDirigibleEvolutionLoop() {
       }
     }
 
-    // PERIODIC MANIFOLD COMPACTION (No longer blocks network syncing)
+    // PERIODIC MANIFOLD COMPACTION
     try {
       const currentLogContent = await Deno.readTextFile(targetTensorFile);
       const currentLines = currentLogContent.trim().split("\n");
