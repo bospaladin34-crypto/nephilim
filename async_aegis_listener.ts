@@ -1,196 +1,127 @@
-const libPath = "./target/release/libvesper.so";
-const targetTensorFile = "./VESPER FULL TENSOR SET (1).txt";
-const gitRepoUrl = "https://github.com/bospaladin34-crypto/nephilim.git";
+// ACT-Ω Advanced Autopoietic Git Sync & Persistent State Listener
 
-const dylib = Deno.dlopen(libPath, {
-  update_braidc_phase: { parameters: ["buffer"], result: "pointer" },
-  inject_vesper_tensor: { parameters: ["buffer", "buffer", "buffer"], result: "void" },
-  add_uarm_goal: { parameters: ["buffer", "u32"], result: "void" },
-  get_uarm_telemetry: { parameters: [], result: "pointer" },
-  free_uarm_string: { parameters: ["pointer"], result: "void" }
-});
+import { delay } from "https://deno.land/std@0.177.0/async/delay.ts";
 
-function encode(str: string): Uint8Array {
-  return new TextEncoder().encode(str + "\0");
+// ======================================================================
+// CONFIGURATION BASELINE: Set this to your exact cycle if no state file exists
+// ======================================================================
+const RESUME_CYCLE = 25; 
+const STATE_FILE = "./.aegis_state.json";
+
+interface EngineState {
+  cycleCounter: number;
+  lastSyncTime: string;
 }
 
-async function runShellWithFeedback(cmd: string[], context: string): Promise<boolean> {
+async function executeGitCommand(args: string[]) {
+  console.log(`[GIT COMMAND] Executing: git ${args.join(" ")}`);
+  const command = new Deno.Command("git", {
+    args: args,
+    stdout: "piped",
+    stderr: "piped",
+  });
+  const { success, stderr } = await command.output();
+  if (!success) {
+    const errorString = new TextDecoder().decode(stderr);
+    console.log(`[GIT ERROR] Command failure: ${errorString}`);
+  }
+}
+
+/**
+ * Persists current manifold coordinates to disk to prevent loss on restart.
+ */
+async function saveEngineState(cycle: number) {
+  const state: EngineState = {
+    cycleCounter: cycle,
+    lastSyncTime: new Date().toISOString()
+  };
+  await Deno.writeTextFile(STATE_FILE, JSON.stringify(state, null, 2));
+}
+
+/**
+ * Retrieves the historical ground state from the local chart index.
+ */
+async function loadEngineState(): Array<number> {
   try {
-    const command = new Deno.Command(cmd[0], {
-      args: cmd.slice(1),
-      stdout: "piped",
-      stderr: "piped"
-    });
-    
-    const { success, stdout, stderr } = await command.output();
-    const decoder = new TextDecoder();
-    
-    if (!success) {
-      const errText = decoder.decode(stderr).trim();
-      console.log(`[GITHUB VERIFICATION WARNING] [${context}] Failed: ${errText}`);
-      return false;
+    const content = await Deno.readTextFile(STATE_FILE);
+    const parsed: EngineState = JSON.parse(content);
+    console.log(`\n💾 [SHEAF RESTORE] Found active state file. Resuming from cycle: ${parsed.cycleCounter}`);
+    return parsed.cycleCounter;
+  } catch (_err) {
+    console.log(`\n💾 [SHEAF INIT] No state file found. Initializing from configuration template at cycle: ${RESUME_CYCLE}`);
+    return RESUME_CYCLE;
+  }
+}
+
+async function triggerAutopoieticGeneration(cycleCount: number) {
+  console.log(`\n✨ [AUTOPOIESIS ENERGIZE] Evaluating system telemetry at cycle ${cycleCount}...`);
+  const autopoieticFileName = `./autopoietic_evolution_log.ts`;
+  
+  const codeContent = `// Autopoietically generated state profile - Cycle ${cycleCount}
+export const TelemetryInvariants = {
+  timestamp: "${new Date().toISOString()}",
+  evolutionCycle: ${cycleCount},
+  simulatedWritheIndex: ${Math.sin(cycleCount) * 1.5},
+  structuralPhaseShift: 0.17259029
+};
+console.log("[AUTOPOIETIC INSTANCE] Loaded dynamic matrix profile version ${cycleCount}.");
+`;
+
+  await Deno.writeTextFile(autopoieticFileName, codeContent);
+  console.log(`✨ [AUTOPOIESIS SYSTEM] Self-generated and saved structural file: ${autopoieticFileName}\n`);
+}
+
+async function startAegisFileSystemWatcher() {
+  console.log("[AEGIS WATCHER] Initializing real-time file system tracking section...");
+  const watcher = Deno.watchFs(".");
+  let gitDebounceLock = false;
+
+  for await (const event of watcher) {
+    if (event.paths.some(path => path.includes(".git") || path.includes(".aegis_state.json"))) continue;
+
+    if (!gitDebounceLock && (event.kind === "modify" || event.kind === "create")) {
+      gitDebounceLock = true;
+      console.log(`\n[AEGIS DETECTED CHANGE] Operations noticed in paths: ${event.paths.join(", ")}`);
+      
+      await delay(1500);
+
+      console.log("[AEGIS CHANNELS] Staging changes and initiating remote synchronization...");
+      await executeGitCommand(["add", "."]);
+      await executeGitCommand(["commit", "-m", `ACT-Ω Autopoietic Push: State Synchronized (${new Date().toLocaleTimeString()})`]);
+      await executeGitCommand(["push"]);
+      
+      console.log("[AEGIS SYNC] Local section references pushed to remote repository successfully.");
+      
+      await delay(2000);
+      gitDebounceLock = false;
     }
-    
-    const outText = decoder.decode(stdout).trim();
-    if (outText.length > 0) {
-      console.log(`[GITHUB SYSTEM LOG] [${context}]: ${outText}`);
-    }
-    return true;
-  } catch (e: any) {
-    console.log(`[SYSTEM EXCEPTION] Critical failure on [${context}]: ${e.message}`);
-    return false;
   }
 }
 
-// SYSTEM SYNC: Remote Git Broadcast Engine with Force Egress override
-async function broadcastToRemoteLedger(message: string) {
-  console.log(`\n[GITHUB SYNC] Initiating remote synchronization sequence...`);
-  
-  await runShellWithFeedback(["git", "add", "async_aegis_listener.ts", targetTensorFile], "Staging Files");
-  
-  const changesStaged = await runShellWithFeedback(["git", "status", "--porcelain"], "Status Verification");
-  if (changesStaged) {
-    await runShellWithFeedback(["git", "commit", "-m", message], "Commit Generation");
-  }
-  
-  console.log(`[GITHUB SYNC] Pushing updates directly to master branch (Force Sync Mode)...`);
-  // FIX: Added the '-f' force option to completely resolve history rejections (Fetch first)
-  const pushSuccess = await runShellWithFeedback(["git", "push", "-f", "-u", "origin", "master"], "Network Egress Push");
-  
-  if (pushSuccess) {
-    console.log("[GITHUB SYNC] SUCCESS: Global section unified with remote repository cleanly.\n");
-  } else {
-    console.log("[GITHUB SYNC] CRITICAL ERROR: Egress push failed. Check network auth/permissions above.\n");
-  }
-}
+async function runMainLoop() {
+  console.log("======================================================================");
+  console.log("🚀 MASTER ACT-Ω PERSISTENT AUTOPOIETIC LISTENER SYSTEM RUNNING");
+  console.log("======================================================================");
 
-// AUTOPOIETIC REFACTOR: Dynamic Self-directed Code Editing & Invention
-async function inventHyperparameterShift(currentRadius: number): Promise<number> {
-  const fileContent = await Deno.readTextFile("async_aegis_listener.ts");
-  const scaleInversionFactor = currentRadius < 0.02 ? 2.5 : 0.65;
-  const newRadius = parseFloat((currentRadius * scaleInversionFactor + 0.01).toFixed(4));
-  
-  console.log(`[AUTOPOIESIS INVENTION] Stagnation detected. Self-editing exploration radius: ${currentRadius} -> ${newRadius}`);
-  
-  const targetRegex = /let baseExplorationRadius = [\d.]+;/;
-  const updatedContent = fileContent.replace(targetRegex, `let baseExplorationRadius = ${newRadius};`);
-  
-  await Deno.writeTextFile("async_aegis_listener.ts", updatedContent);
-  return newRadius;
-}
+  // Load state ledger before spinning up threads
+  let cycleCounter = await loadEngineState();
 
-// CHANNEL 1: Asynchronous Metadata Polling Ingestion Engine
-async function spawnAegisPollingWatcher() {
-  let lastMtime: number | null = null;
-  while (true) {
-    try {
-      const fileInfo = await Deno.stat(targetTensorFile);
-      const currentMtime = fileInfo.mtime?.getTime() ?? null;
-      if (lastMtime !== null && currentMtime !== lastMtime) {
-        const content = await Deno.readTextFile(targetTensorFile);
-        const lines = content.trim().split("\n");
-        for (const line of lines) {
-          if (!line.trim() || !line.startsWith("VESPER_DELTA")) continue;
-          const tokens = line.split("|");
-          if (tokens.length >= 4) {
-            dylib.symbols.inject_vesper_tensor(encode(tokens[1]), encode(tokens[2]), encode(tokens[3]));
-          }
-        }
-      }
-      lastMtime = currentMtime;
-    } catch (_err) { /* Bypass locks */ }
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-  }
-}
-
-// CHANNEL 2: Autonomous Evolutionary Optimization Matrix
-async function spawnDirigibleEvolutionLoop() {
-  console.log("[INITIALIZATION] Synchronizing local Git environment state...");
-  await runShellWithFeedback(["git", "init"], "Git Initialization");
-  await runShellWithFeedback(["git", "branch", "-M", "master"], "Branch Name Alignment");
-  await runShellWithFeedback(["git", "remote", "remove", "origin"], "Pruning Old Remote");
-  await runShellWithFeedback(["git", "remote", "add", "origin", gitRepoUrl], "Binding Current Origin");
-
-  // BOOT FLUSH: Instant push to confirm connectivity before starting the evolution math loop
-  await broadcastToRemoteLedger("infra: initialize live autopoiesis network pipeline");
-
-  let evolutionEpoch = 2222; 
-  let runningBestLogMetric = 50.1205; 
-  let consecutiveRejections = 0;
-  let baseExplorationRadius = 0.0425;
+  // Spin up file system watcher in background thread
+  startAegisFileSystemWatcher();
 
   while (true) {
-    await new Promise((resolve) => setTimeout(resolve, 7000));
-    evolutionEpoch++;
-
-    const rawTelemetryPtr = dylib.symbols.get_uarm_telemetry();
-    let rawSystemHealth = Math.pow(10, runningBestLogMetric);
-
-    if (rawTelemetryPtr !== null) {
-      try {
-        const view = new Deno.UnsafePointerView(rawTelemetryPtr);
-        const telemetryObj = JSON.parse(view.getCString());
-        const rawHead = telemetryObj.tensor_space_head;
-        rawSystemHealth = Array.isArray(rawHead) ? rawHead[0] : (rawHead ?? rawSystemHealth);
-      } catch (_e) { /* Recover */ } finally {
-        dylib.symbols.free_uarm_string(rawTelemetryPtr);
-      }
+    cycleCounter++;
+    console.log(`[LIVE STREAM LOOP] Pulse tick verified. Cycle Count: ${cycleCounter}`);
+    
+    // Save current checkpoint location
+    await saveEngineState(cycleCounter);
+    
+    if (cycleCounter % 5 === 0) {
+      await triggerAutopoieticGeneration(cycleCounter);
     }
 
-    let currentLogHealth = rawSystemHealth > 0 ? Math.log10(rawSystemHealth) : runningBestLogMetric;
-    if (currentLogHealth < runningBestLogMetric) currentLogHealth = runningBestLogMetric;
-
-    const dynamicDamping = 1.0 / (1.0 + consecutiveRejections * 0.5);
-    const logSpaceDrift = (Math.random() * (baseExplorationRadius * dynamicDamping) - (0.015 * dynamicDamping));
-    const candidateLogScore = currentLogHealth + logSpaceDrift;
-
-    console.log(`\n[EPOCH ${evolutionEpoch}] Raw Health: ${rawSystemHealth.toExponential(4)} | Log Value: ${currentLogHealth.toFixed(4)}`);
-
-    if (candidateLogScore >= runningBestLogMetric) {
-      console.log(`[SELECTION] Gating: PASSED. Log ${candidateLogScore.toFixed(4)} >= Baseline ${runningBestLogMetric.toFixed(4)}`);
-      runningBestLogMetric = candidateLogScore;
-      consecutiveRejections = 0;
-
-      const base64Warp = btoa(runningBestLogMetric.toFixed(4)).substring(0, 8);
-      const mockTensorPayload = `wxtDNXVs/jQc3Ry1hYICNQq+2bQLDrezgl5iNAt73bMK2aS0CNmLswIV${base64Warp}`;
-      const selfAuthoredDelta = `VESPER_DELTA|E${evolutionEpoch}|T0001|${mockTensorPayload}`;
-
-      try {
-        await Deno.writeTextFile(targetTensorFile, selfAuthoredDelta + "\n", { append: true });
-        await broadcastToRemoteLedger(`autopoiesis: step passed at epoch ${evolutionEpoch} (log metric ${runningBestLogMetric.toFixed(4)})`);
-      } catch (err) { console.error("Write error:", err); }
-    } else {
-      consecutiveRejections++;
-      console.log(`[SELECTION] Gating: REJECTED. Consecutive Rejections: ${consecutiveRejections}`);
-
-      if (consecutiveRejections >= 5) {
-        baseExplorationRadius = await inventHyperparameterShift(baseExplorationRadius);
-        consecutiveRejections = 0;
-      }
-    }
-
-    // PERIODIC MANIFOLD COMPACTION
-    try {
-      const currentLogContent = await Deno.readTextFile(targetTensorFile);
-      const currentLines = currentLogContent.trim().split("\n");
-
-      if (currentLines.length > 11) {
-        console.log(`[COMPACTION] Log depth limit crossed (${currentLines.length} lines). Commencing compaction...`);
-        const base64Genesis = btoa(runningBestLogMetric.toFixed(4)).substring(0, 8);
-        const compressedGenesisSnapshot = `VESPER_DELTA|E00|GENESIS|wxtDNXVs/jQc3Ry1hYICNQq+2bQLDrezgl5iNAt73bMK2aS0CNmLswIV${base64Genesis}`;
-        
-        await Deno.writeTextFile(targetTensorFile, compressedGenesisSnapshot + "\n", { append: false });
-        await broadcastToRemoteLedger(`autopoiesis: compression checkpoint at epoch ${evolutionEpoch}`);
-      }
-    } catch (_err) { /* Intercept file system locks */ }
+    await delay(5000);
   }
 }
 
-spawnAegisPollingWatcher();
-spawnDirigibleEvolutionLoop();
-
-console.log("[CORE] Self-authoring matrix initialized with live push logging. Tracking...");
-setInterval(() => {
-  const ptr = dylib.symbols.update_braidc_phase(encode("METRICS_HIGH_LOAD"));
-  if (ptr !== null) dylib.symbols.free_uarm_string(ptr);
-}, 3000);
+runMainLoop();

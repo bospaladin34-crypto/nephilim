@@ -1,0 +1,16 @@
+[package]
+name = "nephilim-core"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "vesper"
+crate-type = ["cdylib"]
+
+[dependencies]
+once_cell = "1.18"
+
+[profile.release]
+lto = false
+codegen-units = 1
+panic = 'abort'
