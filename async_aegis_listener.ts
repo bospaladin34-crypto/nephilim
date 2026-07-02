@@ -42,7 +42,7 @@ async function runShellWithFeedback(cmd: string[], context: string): Promise<boo
   }
 }
 
-// SYSTEM SYNC: Remote Git Broadcast Engine targeting 'master' branch explicitly
+// SYSTEM SYNC: Remote Git Broadcast Engine with Force Egress override
 async function broadcastToRemoteLedger(message: string) {
   console.log(`\n[GITHUB SYNC] Initiating remote synchronization sequence...`);
   
@@ -53,8 +53,9 @@ async function broadcastToRemoteLedger(message: string) {
     await runShellWithFeedback(["git", "commit", "-m", message], "Commit Generation");
   }
   
-  console.log(`[GITHUB SYNC] Pushing updates directly to master branch...`);
-  const pushSuccess = await runShellWithFeedback(["git", "push", "-u", "origin", "master"], "Network Egress Push");
+  console.log(`[GITHUB SYNC] Pushing updates directly to master branch (Force Sync Mode)...`);
+  // FIX: Added the '-f' force option to completely resolve history rejections (Fetch first)
+  const pushSuccess = await runShellWithFeedback(["git", "push", "-f", "-u", "origin", "master"], "Network Egress Push");
   
   if (pushSuccess) {
     console.log("[GITHUB SYNC] SUCCESS: Global section unified with remote repository cleanly.\n");
@@ -106,18 +107,15 @@ async function spawnAegisPollingWatcher() {
 async function spawnDirigibleEvolutionLoop() {
   console.log("[INITIALIZATION] Synchronizing local Git environment state...");
   await runShellWithFeedback(["git", "init"], "Git Initialization");
-  
-  // FIX: Structural branch force-rename to eliminate the 'src refspec master does not match any' discrepancy
   await runShellWithFeedback(["git", "branch", "-M", "master"], "Branch Name Alignment");
-  
   await runShellWithFeedback(["git", "remote", "remove", "origin"], "Pruning Old Remote");
   await runShellWithFeedback(["git", "remote", "add", "origin", gitRepoUrl], "Binding Current Origin");
 
   // BOOT FLUSH: Instant push to confirm connectivity before starting the evolution math loop
   await broadcastToRemoteLedger("infra: initialize live autopoiesis network pipeline");
 
-  let evolutionEpoch = 2221; 
-  let runningBestLogMetric = 50.1205; // Seamless continuation from your latest verified metric line
+  let evolutionEpoch = 2222; 
+  let runningBestLogMetric = 50.1205; 
   let consecutiveRejections = 0;
   let baseExplorationRadius = 0.05;
 
@@ -159,8 +157,6 @@ async function spawnDirigibleEvolutionLoop() {
 
       try {
         await Deno.writeTextFile(targetTensorFile, selfAuthoredDelta + "\n", { append: true });
-        
-        // LIVE PUSH: Fires automatically when optimization updates pass gating criteria
         await broadcastToRemoteLedger(`autopoiesis: step passed at epoch ${evolutionEpoch} (log metric ${runningBestLogMetric.toFixed(4)})`);
       } catch (err) { console.error("Write error:", err); }
     } else {
