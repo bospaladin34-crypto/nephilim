@@ -1,14 +1,15 @@
-// ACT-Ω Advanced Autopoietic Synchronizer & Listener — Version 2.3 (Debugged)
+// ACT-Ω Advanced Autopoietic Synchronizer & Listener — Version 2.4 (Metacircular Expansion)
 import { delay } from "https://deno.land/std@0.177.0/async/delay.ts";
 
 const CORE_PATH = "./autopoietic_evolution_log.ts";
 const STATE_PATH = "./.aegis_state.json";
 const MODULES_DIR = "./generated_modules";
 const README_DIR = "./generated_readmes";
+const LIBRARY_DIR = "./autopoietic_library";
 const TOP_README = "./README.md";
 const CHANGELOG_PATH = "./CHANGELOG.md";
 
-const RESUME_CYCLE = 2332;
+const RESUME_CYCLE = 0;
 
 interface EngineState {
   cycleCounter: number;
@@ -72,7 +73,7 @@ async function appendChangelog(timestamp: string, cycle: number, prevClass: stri
 }
 
 /**
- * Robust Autopoietic Generation Hook
+ * Robust Autopoietic Generation Hook with Metacircular Dynamic Evaluation Loop
  */
 async function triggerAutopoieticGenerationV2(state: EngineState) {
   const prevClass = state.performanceClass;
@@ -91,26 +92,35 @@ async function triggerAutopoieticGenerationV2(state: EngineState) {
     await appendChangelog(timestamp, cycleCounter, prevClass, prevIntegrity, performanceClass, structuralIntegrity);
   }
 
+  // Synchronize target directories
   await Deno.mkdir(MODULES_DIR, { recursive: true });
   await Deno.mkdir(README_DIR, { recursive: true });
+  await Deno.mkdir(LIBRARY_DIR, { recursive: true });
 
-  const coreCode = `// Autopoietically generated state profile - Cycle ${cycleCounter}
-export const TelemetryInvariants = {
-  timestamp: "${timestamp}",
-  evolutionCycle: ${cycleCounter},
-  structuralPhaseShift: ${structuralPhaseShift},
-  structuralIntegrity: ${structuralIntegrity.toFixed(6)},
-  performanceClass: "${performanceClass}"
+  // Generate unique library expansion path name
+  const dynamicLibraryFile = `${LIBRARY_DIR}/lib_matrix_phase_${cycleCounter}.ts`;
+
+  // Autopoietically draft the new library module codebase expansion
+  const libraryCode = `// Autopoietically generated extension library module - Cycle ${cycleCounter}
+export const LibraryMetadata = {
+  generationTimestamp: "${timestamp}",
+  activeCycle: ${cycleCounter},
+  matrixComplexityScalar: ${(structuralIntegrity * 2.5).toFixed(6)}
 };
 
-export function executeDynamicMatrixProjection(inputVector: number[]): number[] {
-  return inputVector.map(v => v * ${structuralIntegrity.toFixed(6)} * ${structuralPhaseShift});
+/**
+ * Dynamically generated transform matrix processing operation
+ */
+export function executeExpansionTransform(inputVector: number[]): number[] {
+  const internalMultiplier = ${(structuralIntegrity * structuralPhaseShift).toFixed(8)};
+  return inputVector.map((val, idx) => val * internalMultiplier * (idx + 1));
 }
-console.log("[AUTOPOIETIC INSTANCE] Active phase profile ${cycleCounter} (${performanceClass}) compiled.");
 `;
 
-  await Deno.writeTextFile(CORE_PATH, coreCode);
-  await Deno.writeTextFile(`${MODULES_DIR}/module_cycle_${cycleCounter}.ts`, coreCode);
+  // Write files to workspace architecture
+  await Deno.writeTextFile(CORE_PATH, libraryCode);
+  await Deno.writeTextFile(`${MODULES_DIR}/module_cycle_${cycleCounter}.ts`, libraryCode);
+  await Deno.writeTextFile(dynamicLibraryFile, libraryCode);
 
   const readmeContent = `# Cycle ${cycleCounter} Manifest\n\n- **Status:** ${performanceClass}\n- **Integrity Matrix:** ${structuralIntegrity.toFixed(6)}\n- **Timestamp:** ${timestamp}\n`;
   await Deno.writeTextFile(`${README_DIR}/readme_cycle_${cycleCounter}.md`, readmeContent);
@@ -118,18 +128,39 @@ console.log("[AUTOPOIETIC INSTANCE] Active phase profile ${cycleCounter} (${perf
   const topReadmeContent = `# ACT-Ω Autopoietic Workspace Runtime Environment\n\nActive monitoring state matrix running continuously.\n\n### Current System Telemetry:\n- **Last Logged Cycle:** ${cycleCounter}\n- **System Topology Classification:** ${performanceClass}\n- **Manifold Structural Density:** ${structuralIntegrity.toFixed(6)}\n- **Synchronization Baseline Epoch:** ${timestamp}\n`;
   await Deno.writeTextFile(TOP_README, topReadmeContent);
 
-  // Update working state object properties
+  // Update memory references
   state.structuralIntegrity = structuralIntegrity;
   state.performanceClass = performanceClass;
   state.lastSyncTime = timestamp;
 
   await saveEngineState(state);
-  console.log(`✨ [AUTOPOIESIS V2.3] State serialized and directory architecture fully synchronized.`);
+  console.log(`✨ [AUTOPOIESIS V2.4] Codebase files written successfully.`);
 
-  // DETERMINISTIC RUNTIME GIT PUSH: Pushes our self-generated assets safely
-  console.log("[AUTOPOIETIC SYNC] Executing structural push to repository mirror...");
+  // ====================================================================
+  // PATHWAY A: METACIRCULAR DYNAMIC HARDWARE-AGNOSTIC EVALUATION LOOP
+  // ====================================================================
+  try {
+    const cacheBusterPath = `./${dynamicLibraryFile}?cb=${Date.now()}`;
+    console.log(`📡 [METACIRCULAR HOT-RELOAD] Importing dynamic module extension: ${dynamicLibraryFile}`);
+    
+    const dynamicModule = await import(cacheBusterPath);
+    
+    if (typeof dynamicModule.executeExpansionTransform === "function") {
+      const mockVector = [10.0, 20.0, 30.0];
+      const transformationResult = dynamicModule.executeExpansionTransform(mockVector);
+      console.log(`✅ [EVALUATION SUCCESS] Dynamic module executed flawlessly.`);
+      console.log(`📊 Vector Projection Result: [ ${transformationResult.map((v: number) => v.toFixed(5)).join(", ")} ]`);
+    } else {
+      throw new Error("Target expansion signature function was not detected in compilation output.");
+    }
+  } catch (evalError) {
+    console.log(`⚠️ [METACIRCULAR ANOMALY] Code runtime validation error: ${evalError.message}`);
+  }
+
+  // DETERMINISTIC RUNTIME AUTONOMOUS GIT PUSH
+  console.log("[AUTOPOIETIC SYNC] Pushing dynamic library extensions to GitHub repository mirror...");
   await executeGitCommand(["add", "."]);
-  await executeGitCommand(["commit", "-m", `ACT-Ω Autopoietic Evolution: Cycle ${cycleCounter} (${performanceClass})`]);
+  await executeGitCommand(["commit", "-m", `ACT-Ω Codebase Expansion: Cycle ${cycleCounter} (${performanceClass})`]);
   await executeGitCommand(["push"]);
 }
 
@@ -147,6 +178,7 @@ async function startAegisFileSystemWatcher() {
       path.includes("autopoietic_evolution_log.ts") || 
       path.includes("generated_modules") || 
       path.includes("generated_readmes") ||
+      path.includes("autopoietic_library") ||
       path.includes("USER_MANUAL.md")
     )) continue;
 
@@ -156,7 +188,7 @@ async function startAegisFileSystemWatcher() {
       
       await delay(1500);
       await executeGitCommand(["add", "."]);
-      await executeGitCommand(["commit", "-m", "ACT-Ω V2.3 Workspace Sync: External Mutation Logged"]);
+      await executeGitCommand(["commit", "-m", "ACT-Ω V2.4 Workspace Sync: External Mutation Logged"]);
       await executeGitCommand(["push"]);
       
       await delay(2000);
@@ -167,7 +199,7 @@ async function startAegisFileSystemWatcher() {
 
 async function runMainLoop() {
   console.log("======================================================================");
-  console.log("🚀 MASTER ACT-Ω PERSISTENT SELF-REFINEMENT RUNTIME V2.3 ONLINE");
+  console.log("🚀 MASTER ACT-Ω METACIRCULAR AUTOPOIETIC CODEBASE SYSTEM V2.4");
   console.log("======================================================================");
 
   const state = await loadEngineState();
@@ -180,7 +212,6 @@ async function runMainLoop() {
     console.log(`[LIVE STREAM LOOP] Pulse tick verified. Cycle Count: ${state.cycleCounter}`);
     
     if (state.cycleCounter % 5 === 0) {
-      // Pass state by reference to maintain structural alignment
       await triggerAutopoieticGenerationV2(state);
     } else {
       await saveEngineState(state);
