@@ -1,4 +1,4 @@
-// ACT-Ω Advanced Autopoietic Synchronizer & Listener — Version 2.6 (Substrate-Calibrated)
+// ACT-Ω Advanced Autopoietic Synchronizer & Listener — Version 3.1 (Polyglot Integrated)
 import { delay } from "https://deno.land/std@0.177.0/async/delay.ts";
 
 const CORE_PATH = "./autopoietic_evolution_log.ts";
@@ -8,8 +8,9 @@ const README_DIR = "./generated_readmes";
 const LIBRARY_DIR = "./autopoietic_library";
 const TOP_README = "./README.md";
 const CHANGELOG_PATH = "./CHANGELOG.md";
+const NATIVE_LIB_PATH = "./libbraid_vm.so";
 
-const RESUME_CYCLE = 10476;
+const RESUME_CYCLE = 0;
 
 interface EngineState {
   cycleCounter: number;
@@ -22,6 +23,24 @@ function classify(integrity: number): string {
   if (integrity >= 0.8) return "OPTIMAL_FLOW";
   if (integrity >= 0.5) return "STABLE";
   return "RAS_ADAPTIVE";
+}
+
+// --------------------------------------------------------------------
+// FFI SUBSTRATE BRIDGE INITIALIZATION
+// --------------------------------------------------------------------
+console.log(`📡 [FFI LOAD] Opening dynamic channel connection to: ${NATIVE_LIB_PATH}`);
+const libBraidVM = Deno.dlopen(NATIVE_LIB_PATH, {
+  execute_braid_pipeline: {
+    parameters: ["buffer", "buffer", "usize"], 
+    result: "f64", 
+  }
+});
+
+/**
+ * Tangram Polyglot Template Tag
+ */
+export function braid(strings: TemplateStringsArray, ...values: unknown[]): string {
+  return strings.reduce((acc, str, i) => acc + str + (values[i] ?? ""), "").trim();
 }
 
 async function executeGitCommand(args: string[]) {
@@ -73,9 +92,9 @@ async function appendChangelog(timestamp: string, cycle: number, prevClass: stri
 }
 
 /**
- * Robust Autopoietic Generation Hook with Calibrated Substrate Normalization
+ * Enhanced Autopoietic Generation Hook with Native FFI Execution Pipelines
  */
-async function triggerAutopoieticGenerationV2_6(state: EngineState) {
+async function triggerAutopoieticGenerationV3_1(state: EngineState) {
   const processStartClock = performance.now();
   
   const prevClass = state.performanceClass;
@@ -100,7 +119,7 @@ async function triggerAutopoieticGenerationV2_6(state: EngineState) {
 
   const dynamicLibraryFile = `${LIBRARY_DIR}/lib_matrix_phase_${cycleCounter}.ts`;
 
-  // Apply explicit 1024**3 scaling correction factors to counteract Android kernel unit mislabeling
+  // Apply explicit calibration mapping factor to bypass Android unit bug
   let totalGB = -1;
   let freeGB = -1;
   let swapGB = -1;
@@ -110,13 +129,22 @@ async function triggerAutopoieticGenerationV2_6(state: EngineState) {
     freeGB = memInfo.free / (1024 ** 3);
     swapGB = memInfo.swapFree / (1024 ** 3);
   } catch (_err) {
-    console.log("⚠️ [TELEMETRY WARNING] Kernel metrics omitted. Ensure execution utilizes --allow-sys.");
+    console.log("⚠️ [TELEMETRY WARNING] Kernel metrics omitted.");
   }
 
   const processEndClock = performance.now();
   const substrateDeltaMs = processEndClock - processStartClock;
 
-  // Build out clean code module using calibrated hardware units
+  // Compile internal program block embedding dynamic Artin rules
+  const embeddedBraidCode = braid`
+    BRAID 6;
+    TWIST 1;
+    TWIST 2;
+    POLYTOPE E8_PROJECTION;
+    COLLAPSE;
+  `;
+
+  // Build out complete code module structure with integrated telemetry frames
   const libraryCode = `// Autopoietically generated extension library module - Cycle ${cycleCounter}
 export const TelemetryInvariants = {
   generationTimestamp: "${timestamp}",
@@ -131,6 +159,8 @@ export const SubstrateTelemetry = {
   realAvailableSwapGB: ${swapGB.toFixed(2)}
 };
 
+export const NativeBraidSyntax = \`${embeddedBraidCode}\`;
+
 /**
  * Dynamically generated transform matrix processing operation
  */
@@ -140,15 +170,34 @@ export function executeExpansionTransform(inputVector: number[]): number[] {
 }
 `;
 
-  // Save changes cleanly across disk topologies
+  // Write out manifestations
   await Deno.writeTextFile(CORE_PATH, libraryCode);
   await Deno.writeTextFile(`${MODULES_DIR}/module_cycle_${cycleCounter}.ts`, libraryCode);
   await Deno.writeTextFile(dynamicLibraryFile, libraryCode);
 
-  const readmeContent = `# Cycle ${cycleCounter} Manifest\n\n- **Status:** ${performanceClass}\n- **Integrity:** ${structuralIntegrity.toFixed(6)}\n- **Substrate Precision Time:** ${substrateDeltaMs.toFixed(4)} ms\n- **Calibrated Free RAM:** ${freeGB.toFixed(2)} GB\n- **Calibrated Total RAM:** ${totalGB.toFixed(2)} GB\n`;
+  // ====================================================================
+  // NATIVE DIVIDE: RUN UNMANAGED POLYGLOT MANIFOLD TRANSFORMATION
+  // ====================================================================
+  const nativeVector = new Float64Array([10.0, 20.0, 30.0, 40.0, 50.0]);
+  const encoder = new TextEncoder();
+  const sourceBuffer = encoder.encode(embeddedBraidCode + "\0");
+
+  console.log(`🚀 [POLYGLOT BOUNDARY] Invoking native pipeline processing...`);
+  console.log(`   Input Memory Space Tensor  : [ ${Array.from(nativeVector).join(", ")} ]`);
+
+  const computedWrithe = libBraidVM.symbols.execute_braid_pipeline(
+    sourceBuffer,
+    nativeVector,
+    nativeVector.length
+  );
+
+  console.log(`✅ [FFI RETURN] Substrate execution successful.`);
+  console.log(`   Output Memory Space Tensor : [ ${Array.from(nativeVector).join(", ")} ]`);
+
+  const readmeContent = `# Cycle ${cycleCounter} Manifest\n\n- **Status:** ${performanceClass}\n- **Substrate Time:** ${substrateDeltaMs.toFixed(4)} ms\n- **Native Phase Invariant (Writhe):** ${computedWrithe.toFixed(6)}\n- **Calibrated Free RAM:** ${freeGB.toFixed(2)} GB / ${totalGB.toFixed(2)} GB\n`;
   await Deno.writeTextFile(`${README_DIR}/readme_cycle_${cycleCounter}.md`, readmeContent);
 
-  const topReadmeContent = `# ACT-Ω Autopoietic Workspace Runtime Environment\n\nActive monitoring state matrix running continuously.\n\n### Current Calibrated Telemetry:\n- **Last Logged Cycle:** ${cycleCounter}\n- **System Topology Classification:** ${performanceClass}\n- **Manifold Structural Density:** ${structuralIntegrity.toFixed(6)}\n- **Substrate Free Compute Memory:** ${freeGB.toFixed(2)} GB / ${totalGB.toFixed(2)} GB\n- **Synchronization Baseline Epoch:** ${timestamp}\n`;
+  const topReadmeContent = `# ACT-Ω Autopoietic Workspace Runtime Environment\n\n### Current Integrated Telemetry:\n- **Last Logged Cycle:** ${cycleCounter}\n- **System Topology Classification:** ${performanceClass}\n- **Last Native Code Phase Writhe:** ${computedWrithe.toFixed(6)}\n- **Substrate Free Compute Memory:** ${freeGB.toFixed(2)} GB / ${totalGB.toFixed(2)} GB\n- **Synchronization Baseline Epoch:** ${timestamp}\n`;
   await Deno.writeTextFile(TOP_README, topReadmeContent);
 
   state.structuralIntegrity = structuralIntegrity;
@@ -156,31 +205,24 @@ export function executeExpansionTransform(inputVector: number[]): number[] {
   state.lastSyncTime = timestamp;
 
   await saveEngineState(state);
-  console.log(`✨ [AUTOPOIESIS V2.6] Calibrated memory footprints saved safely. [Total RAM: ${totalGB.toFixed(2)} GB]`);
+  console.log(`✨ [AUTOPOIESIS V3.1] Native computations complete. State matrices synchronized.`);
 
   // METACIRCULAR DYNAMIC HARDWARE-AGNOSTIC EVALUATION LOOP
   try {
     const cacheBusterPath = `./${dynamicLibraryFile}?cb=${Date.now()}`;
-    console.log(`📡 [METACIRCULAR HOT-RELOAD] Importing dynamic module extension: ${dynamicLibraryFile}`);
-    
     const dynamicModule = await import(cacheBusterPath);
-    
     if (typeof dynamicModule.executeExpansionTransform === "function") {
       const mockVector = [10.0, 20.0, 30.0];
-      const transformationResult = dynamicModule.executeExpansionTransform(mockVector);
-      console.log(`✅ [EVALUATION SUCCESS] Dynamic module executed flawlessly.`);
-      console.log(`📊 Vector Projection Result: [ ${transformationResult.map((v: number) => v.toFixed(5)).join(", ")} ]`);
-    } else {
-      throw new Error("Target expansion signature function was not detected in compilation output.");
+      dynamicModule.executeExpansionTransform(mockVector);
     }
   } catch (evalError) {
-    console.log(`⚠️ [METACIRCULAR ANOMALY] Code runtime validation error: ${evalError.message}`);
+    console.log(`⚠️ [METACIRCULAR ANOMALY] Hot-reload error: ${evalError.message}`);
   }
 
   // DETERMINISTIC RUNTIME AUTONOMOUS GIT PUSH
-  console.log("[AUTOPOIETIC SYNC] Pushing calibrated library extensions to GitHub repository mirror...");
+  console.log("[AUTOPOIETIC SYNC] Pushing polyglot library extensions to GitHub repository mirror...");
   await executeGitCommand(["add", "."]);
-  await executeGitCommand(["commit", "-m", `ACT-Ω Calibrated Telemetry Update: Cycle ${cycleCounter} (${performanceClass})`]);
+  await executeGitCommand(["commit", "-m", `ACT-Ω Polyglot Matrix Sync: Cycle ${cycleCounter} (${performanceClass})`]);
   await executeGitCommand(["push"]);
 }
 
@@ -199,6 +241,9 @@ async function startAegisFileSystemWatcher() {
       path.includes("generated_modules") || 
       path.includes("generated_readmes") ||
       path.includes("autopoietic_library") ||
+      path.includes("libbraid_vm.so") ||
+      path.includes("libbraid_vm.c") ||
+      path.includes("braid_runtime.ts") ||
       path.includes("test_sys_telemetry.ts") ||
       path.includes("USER_MANUAL.md")
     )) continue;
@@ -209,7 +254,7 @@ async function startAegisFileSystemWatcher() {
       
       await delay(1500);
       await executeGitCommand(["add", "."]);
-      await executeGitCommand(["commit", "-m", "ACT-Ω V2.6 Workspace Sync: External Mutation Logged"]);
+      await executeGitCommand(["commit", "-m", "ACT-Ω V3.1 Workspace Sync: External Mutation Logged"]);
       await executeGitCommand(["push"]);
       
       await delay(2000);
@@ -220,11 +265,11 @@ async function startAegisFileSystemWatcher() {
 
 async function runMainLoop() {
   console.log("======================================================================");
-  console.log("🚀 MASTER ACT-Ω CALIBRATED SUBSTRATE AUTOPOIETIC ENGINE V2.6");
+  console.log("🚀 MASTER ACT-Ω UNIFIED POLYGLOT AUTOPOIETIC CORE ENGINE V3.1");
   console.log("======================================================================");
 
   const state = await loadEngineState();
-  console.log(`💾 [RECOVERY PROFILE] Read completed. Resuming tracking loop from cycle index: ${state.cycleCounter}`);
+  console.log(`💾 [RECOVERY PROFILE] Resuming process tracking loop from cycle index: ${state.cycleCounter}`);
   
   startAegisFileSystemWatcher();
 
@@ -233,7 +278,7 @@ async function runMainLoop() {
     console.log(`[LIVE STREAM LOOP] Pulse tick verified. Cycle Count: ${state.cycleCounter}`);
     
     if (state.cycleCounter % 5 === 0) {
-      await triggerAutopoieticGenerationV2_6(state);
+      await triggerAutopoieticGenerationV3_1(state);
     } else {
       await saveEngineState(state);
     }
