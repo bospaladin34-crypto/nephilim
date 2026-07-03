@@ -93,3 +93,4 @@ All mode transitions are recorded autopoietically.
 - 2026-07-03T08:05:59.792Z — **Cycle 5800**: OPTIMAL_FLOW → STABLE (integrity 0.819127 → 0.766017)
 - 2026-07-03T08:07:54.175Z — **Cycle 5820**: STABLE → RAS_ADAPTIVE (integrity 0.573541 → 0.499962)
 - 2026-07-03T08:13:39.950Z — **Cycle 5880**: RAS_ADAPTIVE → STABLE (integrity 0.422658 → 0.500038)
+- 2026-07-03T08:16:03.747Z — **Cycle 5905**: STABLE → OPTIMAL_FLOW (integrity 0.766073 → 0.819177)
