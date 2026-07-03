@@ -14,3 +14,4 @@ All mode transitions are recorded autopoietically.
 - 2026-07-03T02:13:02.881Z — **Cycle 2325**: INIT → OPTIMAL_FLOW (integrity 0.000000 → 0.965930)
 - 2026-07-03T02:13:28.072Z — **Cycle 2330**: INIT → OPTIMAL_FLOW (integrity 0.000000 → 0.984811)
 - 2026-07-03T02:14:26.776Z — **Cycle 2335**: INIT → OPTIMAL_FLOW (integrity 1.000000 → 0.996196)
+- 2026-07-03T02:18:52.805Z — **Cycle 2380**: OPTIMAL_FLOW → STABLE (integrity 0.819142 → 0.766033)
