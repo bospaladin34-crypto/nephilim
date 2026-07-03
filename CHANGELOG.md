@@ -1,0 +1,16 @@
+# Vesper ACT-Ω Changelog
+
+All mode transitions are recorded autopoietically.
+
+- 2026-07-03T02:09:17.039Z — **Cycle 2280**: INIT → STABLE (integrity 0.000000 → 0.500015)
+- 2026-07-03T02:09:42.111Z — **Cycle 2285**: INIT → STABLE (integrity 0.000000 → 0.573590)
+- 2026-07-03T02:10:07.162Z — **Cycle 2290**: INIT → STABLE (integrity 0.000000 → 0.642801)
+- 2026-07-03T02:10:32.241Z — **Cycle 2295**: INIT → STABLE (integrity 0.000000 → 0.707119)
+- 2026-07-03T02:10:57.281Z — **Cycle 2300**: INIT → STABLE (integrity 0.000000 → 0.766056)
+- 2026-07-03T02:11:22.334Z — **Cycle 2305**: INIT → OPTIMAL_FLOW (integrity 0.000000 → 0.819162)
+- 2026-07-03T02:11:47.478Z — **Cycle 2310**: INIT → OPTIMAL_FLOW (integrity 0.000000 → 0.866034)
+- 2026-07-03T02:12:12.637Z — **Cycle 2315**: INIT → OPTIMAL_FLOW (integrity 0.000000 → 0.906315)
+- 2026-07-03T02:12:37.723Z — **Cycle 2320**: INIT → OPTIMAL_FLOW (integrity 0.000000 → 0.939699)
+- 2026-07-03T02:13:02.881Z — **Cycle 2325**: INIT → OPTIMAL_FLOW (integrity 0.000000 → 0.965930)
+- 2026-07-03T02:13:28.072Z — **Cycle 2330**: INIT → OPTIMAL_FLOW (integrity 0.000000 → 0.984811)
+- 2026-07-03T02:14:26.776Z — **Cycle 2335**: INIT → OPTIMAL_FLOW (integrity 1.000000 → 0.996196)

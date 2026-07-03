@@ -1,16 +1,26 @@
-// ACT-Ω Persistent Autopoietic Listener with Advanced Self-Refinement Hook
-
+// ACT-Ω Advanced Autopoietic Synchronizer & Listener — Version 2.3 (Debugged)
 import { delay } from "https://deno.land/std@0.177.0/async/delay.ts";
 
-// ======================================================================
-// CONFIGURATION BASELINE: Manual entry override if no state file exists
-// ======================================================================
-const RESUME_CYCLE = 1702; 
-const STATE_FILE = "./.aegis_state.json";
+const CORE_PATH = "./autopoietic_evolution_log.ts";
+const STATE_PATH = "./.aegis_state.json";
+const MODULES_DIR = "./generated_modules";
+const README_DIR = "./generated_readmes";
+const TOP_README = "./README.md";
+const CHANGELOG_PATH = "./CHANGELOG.md";
+
+const RESUME_CYCLE = 2332;
 
 interface EngineState {
   cycleCounter: number;
+  structuralIntegrity: number;
+  performanceClass: string;
   lastSyncTime: string;
+}
+
+function classify(integrity: number): string {
+  if (integrity >= 0.8) return "OPTIMAL_FLOW";
+  if (integrity >= 0.5) return "STABLE";
+  return "RAS_ADAPTIVE";
 }
 
 async function executeGitCommand(args: string[]) {
@@ -27,86 +37,127 @@ async function executeGitCommand(args: string[]) {
   }
 }
 
-async function saveEngineState(cycle: number) {
-  const state: EngineState = {
-    cycleCounter: cycle,
-    lastSyncTime: new Date().toISOString()
-  };
-  await Deno.writeTextFile(STATE_FILE, JSON.stringify(state, null, 2));
+async function saveEngineState(state: EngineState) {
+  await Deno.writeTextFile(STATE_PATH, JSON.stringify(state, null, 2));
 }
 
-async function loadEngineState(): Promise<number> {
+async function loadEngineState(): Promise<EngineState> {
   try {
-    const content = await Deno.readTextFile(STATE_FILE);
-    const parsed: EngineState = JSON.parse(content);
-    console.log(`\n💾 [SHEAF RESTORE] Found active state file. Resuming from cycle: ${parsed.cycleCounter}`);
-    return parsed.cycleCounter;
+    const content = await Deno.readTextFile(STATE_PATH);
+    const parsed = JSON.parse(content);
+    return {
+      cycleCounter: parsed.cycleCounter ?? RESUME_CYCLE,
+      structuralIntegrity: parsed.structuralIntegrity ?? 1.0,
+      performanceClass: parsed.performanceClass ?? "INIT",
+      lastSyncTime: parsed.lastSyncTime ?? new Date().toISOString()
+    };
   } catch (_err) {
-    console.log(`\n💾 [SHEAF INIT] No state file found. Using default config baseline: ${RESUME_CYCLE}`);
-    return RESUME_CYCLE;
+    return {
+      cycleCounter: RESUME_CYCLE,
+      structuralIntegrity: 1.0,
+      performanceClass: "INIT",
+      lastSyncTime: new Date().toISOString()
+    };
   }
 }
 
-/**
- * NEXT-GEN AUTOPOIETIC SELF-REFINEMENT HOOK
- * Evaluates execution performance profiles and compiles dynamic functional
- * modules to adjust processing weights on the fly.
- */
-async function triggerAutopoieticGeneration(cycleCount: number) {
-  console.log(`\n✨ [AUTOPOIESIS ENERGIZE] Invoking self-refinement matrix at cycle ${cycleCount}...`);
-  const autopoieticFileName = `./autopoietic_evolution_log.ts`;
-  
-  // Compute dynamic structural metrics derived from the Golden Ratio lattice
-  const structuralIntegrity = Math.abs(Math.cos(cycleCount * 0.61803398875));
-  const performanceClass = structuralIntegrity > 0.5 ? "OPTIMAL_FLOW" : "RAS_ADAPTIVE";
+async function appendChangelog(timestamp: string, cycle: number, prevClass: string, prevInt: number, currClass: string, currInt: number) {
+  const header = "# Vesper ACT-Ω Changelog\n\nAll mode transitions are recorded autopoietically.\n\n";
+  const exists = await Deno.stat(CHANGELOG_PATH).then(() => true).catch(() => false);
+  if (!exists) {
+    await Deno.writeTextFile(CHANGELOG_PATH, header);
+  }
+  const line = `- ${timestamp} — **Cycle ${cycle}**: ${prevClass} → ${currClass} (integrity ${prevInt.toFixed(6)} → ${currInt.toFixed(6)})\n`;
+  await Deno.writeTextFile(CHANGELOG_PATH, line, { append: true });
+}
 
-  const codeContent = `// Autopoietically generated state profile - Cycle ${cycleCount}
+/**
+ * Robust Autopoietic Generation Hook
+ */
+async function triggerAutopoieticGenerationV2(state: EngineState) {
+  const prevClass = state.performanceClass;
+  const prevIntegrity = state.structuralIntegrity;
+  
+  const cycleCounter = state.cycleCounter;
+  const structuralPhaseShift = 0.17259029;
+  const structuralIntegrity = Math.abs(Math.cos(cycleCounter * 0.0174533));
+  const performanceClass = classify(structuralIntegrity);
+  const timestamp = new Date().toISOString();
+  
+  const modeSwitched = prevClass !== performanceClass;
+
+  if (modeSwitched) {
+    console.log(`\n🔄 [MODE SWITCH] ${prevClass} → ${performanceClass} at cycle ${cycleCounter}`);
+    await appendChangelog(timestamp, cycleCounter, prevClass, prevIntegrity, performanceClass, structuralIntegrity);
+  }
+
+  await Deno.mkdir(MODULES_DIR, { recursive: true });
+  await Deno.mkdir(README_DIR, { recursive: true });
+
+  const coreCode = `// Autopoietically generated state profile - Cycle ${cycleCounter}
 export const TelemetryInvariants = {
-  timestamp: "${new Date().toISOString()}",
-  evolutionCycle: ${cycleCount},
-  structuralPhaseShift: 0.17259029,
+  timestamp: "${timestamp}",
+  evolutionCycle: ${cycleCounter},
+  structuralPhaseShift: ${structuralPhaseShift},
   structuralIntegrity: ${structuralIntegrity.toFixed(6)},
   performanceClass: "${performanceClass}"
 };
 
-// Autonomous Self-Refinement Function Matrix
 export function executeDynamicMatrixProjection(inputVector: number[]): number[] {
-  const scalingFactor = ${structuralIntegrity.toFixed(6)};
-  return inputVector.map(v => v * scalingFactor * 0.17259029);
+  return inputVector.map(v => v * ${structuralIntegrity.toFixed(6)} * ${structuralPhaseShift});
 }
-
-console.log("[AUTOPOIETIC INSTANCE] Active phase profile ${cycleCount} (${performanceClass}) compiled.");
+console.log("[AUTOPOIETIC INSTANCE] Active phase profile ${cycleCounter} (${performanceClass}) compiled.");
 `;
 
-  await Deno.writeTextFile(autopoieticFileName, codeContent);
-  console.log(`✨ [AUTOPOIESIS SYSTEM] Compiled functional structural module: ${autopoieticFileName}\n`);
+  await Deno.writeTextFile(CORE_PATH, coreCode);
+  await Deno.writeTextFile(`${MODULES_DIR}/module_cycle_${cycleCounter}.ts`, coreCode);
+
+  const readmeContent = `# Cycle ${cycleCounter} Manifest\n\n- **Status:** ${performanceClass}\n- **Integrity Matrix:** ${structuralIntegrity.toFixed(6)}\n- **Timestamp:** ${timestamp}\n`;
+  await Deno.writeTextFile(`${README_DIR}/readme_cycle_${cycleCounter}.md`, readmeContent);
+
+  const topReadmeContent = `# ACT-Ω Autopoietic Workspace Runtime Environment\n\nActive monitoring state matrix running continuously.\n\n### Current System Telemetry:\n- **Last Logged Cycle:** ${cycleCounter}\n- **System Topology Classification:** ${performanceClass}\n- **Manifold Structural Density:** ${structuralIntegrity.toFixed(6)}\n- **Synchronization Baseline Epoch:** ${timestamp}\n`;
+  await Deno.writeTextFile(TOP_README, topReadmeContent);
+
+  // Update working state object properties
+  state.structuralIntegrity = structuralIntegrity;
+  state.performanceClass = performanceClass;
+  state.lastSyncTime = timestamp;
+
+  await saveEngineState(state);
+  console.log(`✨ [AUTOPOIESIS V2.3] State serialized and directory architecture fully synchronized.`);
+
+  // DETERMINISTIC RUNTIME GIT PUSH: Pushes our self-generated assets safely
+  console.log("[AUTOPOIETIC SYNC] Executing structural push to repository mirror...");
+  await executeGitCommand(["add", "."]);
+  await executeGitCommand(["commit", "-m", `ACT-Ω Autopoietic Evolution: Cycle ${cycleCounter} (${performanceClass})`]);
+  await executeGitCommand(["push"]);
 }
 
 async function startAegisFileSystemWatcher() {
-  console.log("[AEGIS WATCHER] File system tracking channels online.");
+  console.log("[AEGIS WATCHER] Operational channels deployed to monitor open sets.");
   const watcher = Deno.watchFs(".");
   let gitDebounceLock = false;
 
   for await (const event of watcher) {
-    // Structural Guard: Ignore internal cache states and manuals to prevent recursion loops
     if (event.paths.some(path => 
       path.includes(".git") || 
       path.includes(".aegis_state.json") || 
+      path.includes("CHANGELOG.md") || 
+      path.includes("README.md") || 
+      path.includes("autopoietic_evolution_log.ts") || 
+      path.includes("generated_modules") || 
+      path.includes("generated_readmes") ||
       path.includes("USER_MANUAL.md")
     )) continue;
 
     if (!gitDebounceLock && (event.kind === "modify" || event.kind === "create")) {
       gitDebounceLock = true;
-      console.log(`\n[AEGIS DETECTED CHANGE] Operations noticed in paths: ${event.paths.join(", ")}`);
+      console.log(`\n[AEGIS WATCH CHANGE] External shift tracked: ${event.paths.join(", ")}`);
       
-      await delay(1500); // Allow system modifications to settle cleanly
-
-      console.log("[AEGIS CHANNELS] Staging changes and initiating remote synchronization...");
+      await delay(1500);
       await executeGitCommand(["add", "."]);
-      await executeGitCommand(["commit", "-m", `ACT-Ω System Update: Cycle Progress Synchronized`]);
+      await executeGitCommand(["commit", "-m", "ACT-Ω V2.3 Workspace Sync: External Mutation Logged"]);
       await executeGitCommand(["push"]);
-      
-      console.log("[AEGIS SYNC] Repository state synchronized successfully.");
       
       await delay(2000);
       gitDebounceLock = false;
@@ -116,21 +167,23 @@ async function startAegisFileSystemWatcher() {
 
 async function runMainLoop() {
   console.log("======================================================================");
-  console.log("🚀 MASTER ACT-Ω PERSISTENT SELF-REFINEMENT RUNTIME ONLINE");
+  console.log("🚀 MASTER ACT-Ω PERSISTENT SELF-REFINEMENT RUNTIME V2.3 ONLINE");
   console.log("======================================================================");
 
-  let cycleCounter = await loadEngineState();
+  const state = await loadEngineState();
+  console.log(`💾 [RECOVERY PROFILE] Read completed. Resuming process tracking loop from cycle index: ${state.cycleCounter}`);
+  
   startAegisFileSystemWatcher();
 
   while (true) {
-    cycleCounter++;
-    console.log(`[LIVE STREAM LOOP] Pulse tick verified. Cycle Count: ${cycleCounter}`);
+    state.cycleCounter++;
+    console.log(`[LIVE STREAM LOOP] Pulse tick verified. Cycle Count: ${state.cycleCounter}`);
     
-    await saveEngineState(cycleCounter);
-    
-    // Trigger advanced functional self-generation every 5 ticks
-    if (cycleCounter % 5 === 0) {
-      await triggerAutopoieticGeneration(cycleCounter);
+    if (state.cycleCounter % 5 === 0) {
+      // Pass state by reference to maintain structural alignment
+      await triggerAutopoieticGenerationV2(state);
+    } else {
+      await saveEngineState(state);
     }
 
     await delay(5000);
