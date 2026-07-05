@@ -1,0 +1,6 @@
+# Cycle 24940 Manifest
+
+- **Status:** RAS_ADAPTIVE
+- **Substrate Time:** 7.2426 ms
+- **Native Phase Invariant (Writhe):** 0.517771
+- **Calibrated Free RAM:** 0.58 GB / 11.29 GB
