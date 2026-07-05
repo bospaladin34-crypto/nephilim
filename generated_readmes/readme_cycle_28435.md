@@ -1,0 +1,6 @@
+# Cycle 28435 Manifest
+
+- **Status:** OPTIMAL_FLOW
+- **Substrate Time:** 14.5700 ms
+- **Native Phase Invariant (Writhe):** 0.517771
+- **Calibrated Free RAM:** 0.28 GB / 11.29 GB
