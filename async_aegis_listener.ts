@@ -1,4 +1,4 @@
-// ACT-Ω Advanced Autopoietic Synchronizer & Listener — Version 3.1 (Polyglot Integrated)
+// ACT-Ω Advanced Autopoietic Synchronizer & Listener — Version 3.2 (IPC Gateway Mesh)
 import { delay } from "https://deno.land/std@0.177.0/async/delay.ts";
 
 const CORE_PATH = "./autopoietic_evolution_log.ts";
@@ -9,8 +9,6 @@ const LIBRARY_DIR = "./autopoietic_library";
 const TOP_README = "./README.md";
 const CHANGELOG_PATH = "./CHANGELOG.md";
 const NATIVE_LIB_PATH = "./libbraid_vm.so";
-
-const RESUME_CYCLE = 0;
 
 interface EngineState {
   cycleCounter: number;
@@ -26,7 +24,7 @@ function classify(integrity: number): string {
 }
 
 // --------------------------------------------------------------------
-// FFI SUBSTRATE BRIDGE INITIALIZATION
+// NATIVE SUBSTRATE BRIDGE INITIALIZATION
 // --------------------------------------------------------------------
 console.log(`📡 [FFI LOAD] Opening dynamic channel connection to: ${NATIVE_LIB_PATH}`);
 const libBraidVM = Deno.dlopen(NATIVE_LIB_PATH, {
@@ -36,25 +34,25 @@ const libBraidVM = Deno.dlopen(NATIVE_LIB_PATH, {
   }
 });
 
-/**
- * Tangram Polyglot Template Tag
- */
-export function braid(strings: TemplateStringsArray, ...values: unknown[]): string {
-  return strings.reduce((acc, str, i) => acc + str + (values[i] ?? ""), "").trim();
+// Mutex lock to prevent simultaneous native execution overlaps
+let ffiMutexLocked = false;
+
+function safeNativeCompute(braidSource: string, inputVector: Float64Array): number {
+  while (ffiMutexLocked) { /* Spin-lock or wait */ }
+  ffiMutexLocked = true;
+  try {
+    const encoder = new TextEncoder();
+    const sourceBuffer = encoder.encode(braidSource + "\0");
+    return libBraidVM.symbols.execute_braid_pipeline(sourceBuffer, inputVector, inputVector.length);
+  } finally {
+    ffiMutexLocked = false;
+  }
 }
 
 async function executeGitCommand(args: string[]) {
-  console.log(`[GIT COMMAND] Executing: git ${args.join(" ")}`);
-  const command = new Deno.Command("git", {
-    args: args,
-    stdout: "piped",
-    stderr: "piped",
-  });
-  const { success, stderr } = await command.output();
-  if (!success) {
-    const errorString = new TextDecoder().decode(stderr);
-    console.log(`[GIT ERROR] Command failure: ${errorString}`);
-  }
+  const command = new Deno.Command("git", { args, stdout: "piped", stderr: "piped" });
+  const { success } = await command.output();
+  return success;
 }
 
 async function saveEngineState(state: EngineState) {
@@ -64,140 +62,98 @@ async function saveEngineState(state: EngineState) {
 async function loadEngineState(): Promise<EngineState> {
   try {
     const content = await Deno.readTextFile(STATE_PATH);
-    const parsed = JSON.parse(content);
-    return {
-      cycleCounter: parsed.cycleCounter ?? RESUME_CYCLE,
-      structuralIntegrity: parsed.structuralIntegrity ?? 1.0,
-      performanceClass: parsed.performanceClass ?? "INIT",
-      lastSyncTime: parsed.lastSyncTime ?? new Date().toISOString()
-    };
+    return JSON.parse(content);
   } catch (_err) {
-    return {
-      cycleCounter: RESUME_CYCLE,
-      structuralIntegrity: 1.0,
-      performanceClass: "INIT",
-      lastSyncTime: new Date().toISOString()
-    };
+    return { cycleCounter: 0, structuralIntegrity: 1.0, performanceClass: "INIT", lastSyncTime: new Date().toISOString() };
   }
 }
 
-async function appendChangelog(timestamp: string, cycle: number, prevClass: string, prevInt: number, currClass: string, currInt: number) {
-  const header = "# Vesper ACT-Ω Changelog\n\nAll mode transitions are recorded autopoietically.\n\n";
-  const exists = await Deno.stat(CHANGELOG_PATH).then(() => true).catch(() => false);
-  if (!exists) {
-    await Deno.writeTextFile(CHANGELOG_PATH, header);
-  }
-  const line = `- ${timestamp} — **Cycle ${cycle}**: ${prevClass} → ${currClass} (integrity ${prevInt.toFixed(6)} → ${currInt.toFixed(6)})\n`;
-  await Deno.writeTextFile(CHANGELOG_PATH, line, { append: true });
+// --------------------------------------------------------------------
+// AEGIS CHANNELS: EXTERNAL IPC ENDPOINT GATEWAY
+// --------------------------------------------------------------------
+function startIPCGateway(state: EngineState) {
+  console.log("🌐 [IPC GATEWAY] Deploying external connectivity mesh on port 8080...");
+  
+  Deno.serve({ port: 8080 }, async (request: Request) => {
+    const url = new URL(request.url);
+
+    // Endpoint 1: Telemetry Probe (Read Current Core Metrics)
+    if (url.pathname === "/telemetry" && request.method === "GET") {
+      let memInfo = {};
+      try { memInfo = Deno.systemMemoryInfo(); } catch (_) {}
+      return new Response(JSON.stringify({ status: "ACTIVE", coreState: state, hardwareMetrics: memInfo }), {
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    // Endpoint 2: Native Computation Offload (Expose FFI Matrix to Foreign Code)
+    if (url.pathname === "/compute" && request.method === "POST") {
+      try {
+        const body = await request.json();
+        const { braidCode, vector } = body; // Expects a string and an array of numbers
+
+        if (!braidCode || !Array.isArray(vector)) {
+          return new Response(JSON.stringify({ error: "Malformed payload matrix." }), { status: 400 });
+        }
+
+        const nativeVector = new Float64Array(vector);
+        const writheResult = safeNativeCompute(braidCode, nativeVector);
+
+        return new Response(JSON.stringify({
+          success: true,
+          phaseWrithe: writheResult,
+          transformedVector: Array.from(nativeVector)
+        }), { headers: { "Content-Type": "application/json" } });
+      } catch (err) {
+        return new Response(JSON.stringify({ error: err.message }), { status: 500 });
+      }
+    }
+
+    return new Response(JSON.stringify({ error: "Endpoint outside local section mappings." }), { status: 404 });
+  });
 }
 
-/**
- * Enhanced Autopoietic Generation Hook with Native FFI Execution Pipelines
- */
-async function triggerAutopoieticGenerationV3_1(state: EngineState) {
+// --------------------------------------------------------------------
+// PRIMARY AUTOPOIETIC SYNC CYCLE
+// --------------------------------------------------------------------
+async function triggerAutopoieticGenerationV3_2(state: EngineState) {
   const processStartClock = performance.now();
-  
-  const prevClass = state.performanceClass;
-  const prevIntegrity = state.structuralIntegrity;
-  
   const cycleCounter = state.cycleCounter;
-  const structuralPhaseShift = 0.17259029;
   const structuralIntegrity = Math.abs(Math.cos(cycleCounter * 0.0174533));
   const performanceClass = classify(structuralIntegrity);
   const timestamp = new Date().toISOString();
-  
-  const modeSwitched = prevClass !== performanceClass;
-
-  if (modeSwitched) {
-    console.log(`\n🔄 [MODE SWITCH] ${prevClass} → ${performanceClass} at cycle ${cycleCounter}`);
-    await appendChangelog(timestamp, cycleCounter, prevClass, prevIntegrity, performanceClass, structuralIntegrity);
-  }
 
   await Deno.mkdir(MODULES_DIR, { recursive: true });
   await Deno.mkdir(README_DIR, { recursive: true });
   await Deno.mkdir(LIBRARY_DIR, { recursive: true });
 
-  const dynamicLibraryFile = `${LIBRARY_DIR}/lib_matrix_phase_${cycleCounter}.ts`;
-
-  // Apply explicit calibration mapping factor to bypass Android unit bug
-  let totalGB = -1;
-  let freeGB = -1;
-  let swapGB = -1;
+  let totalGB = -1, freeGB = -1;
   try {
     const memInfo = Deno.systemMemoryInfo();
     totalGB = memInfo.total / (1024 ** 3);
     freeGB = memInfo.free / (1024 ** 3);
-    swapGB = memInfo.swapFree / (1024 ** 3);
-  } catch (_err) {
-    console.log("⚠️ [TELEMETRY WARNING] Kernel metrics omitted.");
-  }
+  } catch (_err) {}
 
-  const processEndClock = performance.now();
-  const substrateDeltaMs = processEndClock - processStartClock;
+  const dynamicBraidCode = `BRAID 6; TWIST 1; TWIST 2; COLLAPSE;`;
+  const internalVector = new Float64Array([10.0, 20.0, 30.0, 40.0, 50.0]);
+  
+  // Execute internal pipeline check via shared substrate function
+  const computedWrithe = safeNativeCompute(dynamicBraidCode, internalVector);
+  const substrateDeltaMs = performance.now() - processStartClock;
 
-  // Compile internal program block embedding dynamic Artin rules
-  const embeddedBraidCode = braid`
-    BRAID 6;
-    TWIST 1;
-    TWIST 2;
-    POLYTOPE E8_PROJECTION;
-    COLLAPSE;
-  `;
-
-  // Build out complete code module structure with integrated telemetry frames
   const libraryCode = `// Autopoietically generated extension library module - Cycle ${cycleCounter}
-export const TelemetryInvariants = {
-  generationTimestamp: "${timestamp}",
-  activeCycle: ${cycleCounter},
-  matrixComplexityScalar: ${(structuralIntegrity * 2.5).toFixed(6)}
-};
-
-export const SubstrateTelemetry = {
-  executionDeltaMs: ${substrateDeltaMs.toFixed(4)},
-  realTotalMemoryGB: ${totalGB.toFixed(2)},
-  realFreeMemoryGB: ${freeGB.toFixed(2)},
-  realAvailableSwapGB: ${swapGB.toFixed(2)}
-};
-
-export const NativeBraidSyntax = \`${embeddedBraidCode}\`;
-
-/**
- * Dynamically generated transform matrix processing operation
- */
-export function executeExpansionTransform(inputVector: number[]): number[] {
-  const internalMultiplier = ${(structuralIntegrity * structuralPhaseShift).toFixed(8)};
-  return inputVector.map((val, idx) => val * internalMultiplier * (idx + 1));
-}
+export const TelemetryInvariants = { generationTimestamp: "${timestamp}", activeCycle: ${cycleCounter} };
+export const NativeBraidSyntax = \`${dynamicBraidCode}\`;
 `;
 
-  // Write out manifestations
   await Deno.writeTextFile(CORE_PATH, libraryCode);
   await Deno.writeTextFile(`${MODULES_DIR}/module_cycle_${cycleCounter}.ts`, libraryCode);
-  await Deno.writeTextFile(dynamicLibraryFile, libraryCode);
+  await Deno.writeTextFile(`${LIBRARY_DIR}/lib_matrix_phase_${cycleCounter}.ts`, libraryCode);
 
-  // ====================================================================
-  // NATIVE DIVIDE: RUN UNMANAGED POLYGLOT MANIFOLD TRANSFORMATION
-  // ====================================================================
-  const nativeVector = new Float64Array([10.0, 20.0, 30.0, 40.0, 50.0]);
-  const encoder = new TextEncoder();
-  const sourceBuffer = encoder.encode(embeddedBraidCode + "\0");
-
-  console.log(`🚀 [POLYGLOT BOUNDARY] Invoking native pipeline processing...`);
-  console.log(`   Input Memory Space Tensor  : [ ${Array.from(nativeVector).join(", ")} ]`);
-
-  const computedWrithe = libBraidVM.symbols.execute_braid_pipeline(
-    sourceBuffer,
-    nativeVector,
-    nativeVector.length
-  );
-
-  console.log(`✅ [FFI RETURN] Substrate execution successful.`);
-  console.log(`   Output Memory Space Tensor : [ ${Array.from(nativeVector).join(", ")} ]`);
-
-  const readmeContent = `# Cycle ${cycleCounter} Manifest\n\n- **Status:** ${performanceClass}\n- **Substrate Time:** ${substrateDeltaMs.toFixed(4)} ms\n- **Native Phase Invariant (Writhe):** ${computedWrithe.toFixed(6)}\n- **Calibrated Free RAM:** ${freeGB.toFixed(2)} GB / ${totalGB.toFixed(2)} GB\n`;
+  const readmeContent = `# Cycle ${cycleCounter} Manifest\n- **Native Phase Invariant:** ${computedWrithe.toFixed(6)}\n- **Free RAM:** ${freeGB.toFixed(2)} GB / ${totalGB.toFixed(2)} GB\n`;
   await Deno.writeTextFile(`${README_DIR}/readme_cycle_${cycleCounter}.md`, readmeContent);
 
-  const topReadmeContent = `# ACT-Ω Autopoietic Workspace Runtime Environment\n\n### Current Integrated Telemetry:\n- **Last Logged Cycle:** ${cycleCounter}\n- **System Topology Classification:** ${performanceClass}\n- **Last Native Code Phase Writhe:** ${computedWrithe.toFixed(6)}\n- **Substrate Free Compute Memory:** ${freeGB.toFixed(2)} GB / ${totalGB.toFixed(2)} GB\n- **Synchronization Baseline Epoch:** ${timestamp}\n`;
+  const topReadmeContent = `# ACT-Ω Networked Mesh Runtime Environment\n\n- **Active Cycle:** ${cycleCounter}\n- **IPC Listener Matrix:** http://localhost:8080/compute\n- **System Status:** ${performanceClass}\n`;
   await Deno.writeTextFile(TOP_README, topReadmeContent);
 
   state.structuralIntegrity = structuralIntegrity;
@@ -205,80 +161,29 @@ export function executeExpansionTransform(inputVector: number[]): number[] {
   state.lastSyncTime = timestamp;
 
   await saveEngineState(state);
-  console.log(`✨ [AUTOPOIESIS V3.1] Native computations complete. State matrices synchronized.`);
+  console.log(`✨ [AUTOPOIESIS V3.2] Loop Sync Complete. Native Vector Out: [ ${Array.from(internalVector).join(", ")} ]`);
 
-  // METACIRCULAR DYNAMIC HARDWARE-AGNOSTIC EVALUATION LOOP
-  try {
-    const cacheBusterPath = `./${dynamicLibraryFile}?cb=${Date.now()}`;
-    const dynamicModule = await import(cacheBusterPath);
-    if (typeof dynamicModule.executeExpansionTransform === "function") {
-      const mockVector = [10.0, 20.0, 30.0];
-      dynamicModule.executeExpansionTransform(mockVector);
-    }
-  } catch (evalError) {
-    console.log(`⚠️ [METACIRCULAR ANOMALY] Hot-reload error: ${evalError.message}`);
-  }
-
-  // DETERMINISTIC RUNTIME AUTONOMOUS GIT PUSH
-  console.log("[AUTOPOIETIC SYNC] Pushing polyglot library extensions to GitHub repository mirror...");
   await executeGitCommand(["add", "."]);
-  await executeGitCommand(["commit", "-m", `ACT-Ω Polyglot Matrix Sync: Cycle ${cycleCounter} (${performanceClass})`]);
+  await executeGitCommand(["commit", "-m", `ACT-Ω Polyglot Gateway Sync: Cycle ${cycleCounter} (${performanceClass})`]);
   await executeGitCommand(["push"]);
-}
-
-async function startAegisFileSystemWatcher() {
-  console.log("[AEGIS WATCHER] Operational channels deployed to monitor open sets.");
-  const watcher = Deno.watchFs(".");
-  let gitDebounceLock = false;
-
-  for await (const event of watcher) {
-    if (event.paths.some(path => 
-      path.includes(".git") || 
-      path.includes(".aegis_state.json") || 
-      path.includes("CHANGELOG.md") || 
-      path.includes("README.md") || 
-      path.includes("autopoietic_evolution_log.ts") || 
-      path.includes("generated_modules") || 
-      path.includes("generated_readmes") ||
-      path.includes("autopoietic_library") ||
-      path.includes("libbraid_vm.so") ||
-      path.includes("libbraid_vm.c") ||
-      path.includes("braid_runtime.ts") ||
-      path.includes("test_sys_telemetry.ts") ||
-      path.includes("USER_MANUAL.md")
-    )) continue;
-
-    if (!gitDebounceLock && (event.kind === "modify" || event.kind === "create")) {
-      gitDebounceLock = true;
-      console.log(`\n[AEGIS WATCH CHANGE] External shift tracked: ${event.paths.join(", ")}`);
-      
-      await delay(1500);
-      await executeGitCommand(["add", "."]);
-      await executeGitCommand(["commit", "-m", "ACT-Ω V3.1 Workspace Sync: External Mutation Logged"]);
-      await executeGitCommand(["push"]);
-      
-      await delay(2000);
-      gitDebounceLock = false;
-    }
-  }
 }
 
 async function runMainLoop() {
   console.log("======================================================================");
-  console.log("🚀 MASTER ACT-Ω UNIFIED POLYGLOT AUTOPOIETIC CORE ENGINE V3.1");
+  console.log("🚀 MASTER ACT-Ω UNIFIED NETWORKED AUTOPOIETIC ENGINE V3.2");
   console.log("======================================================================");
 
   const state = await loadEngineState();
-  console.log(`💾 [RECOVERY PROFILE] Resuming process tracking loop from cycle index: ${state.cycleCounter}`);
   
-  startAegisFileSystemWatcher();
+  // Fire the IPC endpoint gateway server into parallel background context
+  startIPCGateway(state);
 
   while (true) {
     state.cycleCounter++;
     console.log(`[LIVE STREAM LOOP] Pulse tick verified. Cycle Count: ${state.cycleCounter}`);
     
     if (state.cycleCounter % 5 === 0) {
-      await triggerAutopoieticGenerationV3_1(state);
+      await triggerAutopoieticGenerationV3_2(state);
     } else {
       await saveEngineState(state);
     }
