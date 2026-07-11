@@ -1,5 +1,5 @@
 const STATE_FILE = ".aegis_state.json";
-const README_FILE = "../README.md";
+const README_FILE = "../README_v1783799551.md";
 
 // --- STATE MANAGEMENT ---
 async function loadEngineState() {
@@ -14,7 +14,7 @@ async function loadEngineState() {
     const match = readme.match(/Active Cycle:\s*(\d+)/);
     if (match) {
         baselineCycle = parseInt(match[1], 10);
-        console.log(`🔍 [RECOVERY SYSTEM] Extracted lost baseline cycle from README.md: ${baselineCycle}`);
+        console.log(`🔍 [RECOVERY SYSTEM] Extracted lost baseline cycle from README_v1783799551.md: ${baselineCycle}`);
     }
   }
 
