@@ -108,6 +108,7 @@ async function runMainLoop() {
     
     // Mutation Fix: Advance the non-commutative core counter
     state.cycleCounter++;
+    await saveEngineState(state);
     
     // Auto-save: Continuous synchronization back to the Aegis layer
     await saveEngineState(state);
