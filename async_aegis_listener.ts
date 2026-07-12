@@ -5,18 +5,23 @@ const CHANGELOG = "CHANGELOG.md";
 const STATUS_JSON = "status.json";
 
 async function writeArtifact(path: string, content: string) { await Deno.writeTextFile(path, content); }
-async function loadEngineState() { try { return JSON.parse(await Deno.readTextFile(STATE_FILE)); } catch { return { cycleCounter: 68230, structuralIntegrity: 1.0, queueLog: [] }; } }
+async function loadEngineState() { try { return JSON.parse(await Deno.readTextFile(STATE_FILE)); } catch { return { cycleCounter: 68730, structuralIntegrity: 1.0, queueLog: [] }; } }
 async function saveEngineState(state: any) { await Deno.writeTextFile(STATE_FILE, JSON.stringify(state, null, 2)); }
 
 const state = await loadEngineState();
 
-// IPC Mesh Integration
+// IPC Mesh Integration - Wrapped in Aegis Deflection
 Deno.serve({ port: 8080 }, async (req) => {
   const url = new URL(req.url);
   if (url.pathname === "/compute" && req.method === "POST") {
-    const data = await req.json();
-    state.queueLog.push({ ts: new Date().toISOString(), data });
-    return new Response(JSON.stringify({ status: "ENQUEUED" }));
+    try {
+      const data = await req.json();
+      state.queueLog.push({ ts: new Date().toISOString(), data });
+      return new Response(JSON.stringify({ status: "ENQUEUED" }));
+    } catch (e) {
+      console.log(`🛡️ [AEGIS SHIELD] Deflected malformed IPC payload.`);
+      return new Response(JSON.stringify({ error: "Malformed payload dropped" }), { status: 400 });
+    }
   }
   return new Response("Mesh Active");
 });
@@ -31,6 +36,10 @@ async function runMainLoop() {
       try {
         const ts = new Date().toISOString();
         
+        // Automation Injection
+        console.log(`⚙️ [AUTOMATION] Executing 4-Phase Lifecycle...`);
+        await new Deno.Command("deno", { args: ["run", "--allow-all", "act_omega_automation.ts"] }).output();
+
         // 1. Core Sync using explicitly defined constants
         let readme = await Deno.readTextFile(README_FILE);
         readme = readme.replace(/- \*\*Active Cycle:\*\* \d+/, `- **Active Cycle:** ${state.cycleCounter}`);
@@ -50,7 +59,7 @@ async function runMainLoop() {
 
         // 4. Atomic Git Projection
         await new Deno.Command("git", { args: ["add", "."] }).output();
-        await new Deno.Command("git", { args: ["commit", "-m", `ACT-Ω Sync: Pulse ${state.cycleCounter}`] }).output();
+        await new Deno.Command("git", { args: ["commit", "-m", `ACT-Ω Sync: Pulse ${state.cycleCounter} (Auto-Lifecycle Executed)`] }).output();
         await new Deno.Command("git", { args: ["push"] }).output();
       } catch (e) { console.error("⚠️ [GIT CRASH]:", e); }
     }
