@@ -7,14 +7,30 @@
 const PORT = 8080;
 const AMPLITUHEDRON_SIZE = 24; // 4 bytes MZM_A + 16 bytes Tensor + 4 bytes MZM_B
 
+function getLocalIp(): string {
+    try {
+        const interfaces = Deno.networkInterfaces();
+        for (const iface of interfaces) {
+            // Strip biological local loopbacks and target the active IPv4 hardware radio
+            if (iface.family === "IPv4" && !iface.address.startsWith("127.")) {
+                return iface.address;
+            }
+        }
+    } catch(e) { 
+        return "IP_EXTRACTION_FRACTURED"; 
+    }
+    return "UNKNOWN_IP";
+}
+
 async function igniteAegisListener() {
+    const localIp = getLocalIp();
     console.clear();
     console.log("================================================================================");
-    console.log(`>>> NEPHILIM EDGE NODE DEPLOYED: LISTENING ON TCP PORT ${PORT}`);
+    console.log(`>>> NEPHILIM EDGE NODE DEPLOYED: LISTENING ON TCP ${localIp}:${PORT}`);
     console.log(">>> AWAITING σ4 BOUNDARY ENTANGLEMENT FROM MISSOULA NODE...");
     console.log("================================================================================");
 
-    const listener = Deno.listen({ port: PORT });
+    const listener = Deno.listen({ hostname: "0.0.0.0", port: PORT });
 
     for await (const conn of listener) {
         console.log(">>> [DCP-BRIDGE] INCOMING TOPOLOGY DETECTED. ALLOCATING ZERO-COPY BUFFER.");
