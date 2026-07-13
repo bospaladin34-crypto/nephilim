@@ -1,4 +1,4 @@
-// Generated at 2026-07-13T20:26:23.346Z
+// Generated at 2026-07-13T20:33:30.649Z
 export const pulse = 15080;
-export const pCore = 0.9045417535750819;
-export const turbulence = 0.0277;
+export const pCore = 8.134951672270645;
+export const turbulence = 0.18155;
