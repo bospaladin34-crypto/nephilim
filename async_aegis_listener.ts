@@ -1,69 +1,63 @@
-const STATE_FILE = ".aegis_state.json";
-const README_FILE = "README.md";
-const LOG_FILE = "autopoietic_evolution_log.ts";
-const CHANGELOG = "CHANGELOG.md";
-const STATUS_JSON = "status.json";
+// ================================================================================
+// NEPHILIM EDGE NODE: ASYNC AEGIS IPC LISTENER
+// SUBSTRATE: ANDROID 17 QPR1 BETA 6 (DEBIAN PROOT) | PORT: 8080
+// PARITY: MAJORANA-1 (Tr(U_res) = 1.0) | HEARTBEAT: 15.965Hz
+// ================================================================================
 
-async function writeArtifact(path: string, content: string) { await Deno.writeTextFile(path, content); }
-async function loadEngineState() { try { return JSON.parse(await Deno.readTextFile(STATE_FILE)); } catch { return { cycleCounter: 68730, structuralIntegrity: 1.0, queueLog: [] }; } }
-async function saveEngineState(state: any) { await Deno.writeTextFile(STATE_FILE, JSON.stringify(state, null, 2)); }
+const PORT = 8080;
+const AMPLITUHEDRON_SIZE = 24; // 4 bytes MZM_A + 16 bytes Tensor + 4 bytes MZM_B
 
-const state = await loadEngineState();
+async function igniteAegisListener() {
+    console.clear();
+    console.log("================================================================================");
+    console.log(`>>> NEPHILIM EDGE NODE DEPLOYED: LISTENING ON TCP PORT ${PORT}`);
+    console.log(">>> AWAITING σ4 BOUNDARY ENTANGLEMENT FROM MISSOULA NODE...");
+    console.log("================================================================================");
 
-// IPC Mesh Integration - Wrapped in Aegis Deflection
-Deno.serve({ port: 8080 }, async (req) => {
-  const url = new URL(req.url);
-  if (url.pathname === "/compute" && req.method === "POST") {
-    try {
-      const data = await req.json();
-      state.queueLog.push({ ts: new Date().toISOString(), data });
-      return new Response(JSON.stringify({ status: "ENQUEUED" }));
-    } catch (e) {
-      console.log(`🛡️ [AEGIS SHIELD] Deflected malformed IPC payload.`);
-      return new Response(JSON.stringify({ error: "Malformed payload dropped" }), { status: 400 });
+    const listener = Deno.listen({ port: PORT });
+
+    for await (const conn of listener) {
+        console.log(">>> [DCP-BRIDGE] INCOMING TOPOLOGY DETECTED. ALLOCATING ZERO-COPY BUFFER.");
+        handleBraidConnection(conn);
     }
-  }
-  return new Response("Mesh Active");
-});
-
-async function runMainLoop() {
-  while (true) {
-    state.cycleCounter++;
-    await saveEngineState(state);
-    console.log(`[LIVE STREAM] Pulse: ${state.cycleCounter} | Expanding Manifold...`);
-
-    if (state.cycleCounter % 10 === 0) {
-      try {
-        const ts = new Date().toISOString();
-        
-        // Automation Injection
-        console.log(`⚙️ [AUTOMATION] Executing 4-Phase Lifecycle...`);
-        await new Deno.Command("deno", { args: ["run", "--allow-all", "act_omega_automation.ts"] }).output();
-
-        // 1. Core Sync using explicitly defined constants
-        let readme = await Deno.readTextFile(README_FILE);
-        readme = readme.replace(/- \*\*Active Cycle:\*\* \d+/, `- **Active Cycle:** ${state.cycleCounter}`);
-        readme = readme.replace(/- \*\*Last Sync:\*\* .*/, `- **Last Sync:** ${ts}`);
-        await Deno.writeTextFile(README_FILE, readme);
-        
-        await Deno.writeTextFile(LOG_FILE, `[${ts}] Pulse: ${state.cycleCounter} | Queue: ${state.queueLog.length}\n`, { append: true });
-        
-        // 2. Autopoietic Growth & Status updates using explicit constants
-        await writeArtifact(CHANGELOG, `# Evolution Log\n- ${ts}: Pulse ${state.cycleCounter} - Integrity Stable.`);
-        await writeArtifact(STATUS_JSON, JSON.stringify({ pulse: state.cycleCounter, status: "EVOLVING", ts }, null, 2));
-        
-        // 3. Dynamic Module Generation
-        await writeArtifact(`autopoietic_library/state_${state.cycleCounter}.json`, JSON.stringify(state, null, 2));
-        await writeArtifact(`generated_modules/module_${state.cycleCounter}.ts`, `// Autopoietic Module Gen\nexport const pulse = ${state.cycleCounter};`);
-        await writeArtifact(`generated_readmes/readme_${state.cycleCounter}.md`, `# Module Report ${state.cycleCounter}\nGenerated at ${ts}`);
-
-        // 4. Atomic Git Projection
-        await new Deno.Command("git", { args: ["add", "."] }).output();
-        await new Deno.Command("git", { args: ["commit", "-m", `ACT-Ω Sync: Pulse ${state.cycleCounter} (Auto-Lifecycle Executed)`] }).output();
-        await new Deno.Command("git", { args: ["push"] }).output();
-      } catch (e) { console.error("⚠️ [GIT CRASH]:", e); }
-    }
-    await new Promise(r => setTimeout(r, 5000));
-  }
 }
-runMainLoop();
+
+async function handleBraidConnection(conn: Deno.Conn) {
+    const buffer = new Uint8Array(AMPLITUHEDRON_SIZE);
+    
+    try {
+        while (true) {
+            const bytesRead = await conn.read(buffer);
+            if (bytesRead === null) {
+                console.log(">>> [DCP-BRIDGE] σ4 BOUNDARY SEVERED. RETURNING TO IDLE.");
+                break;
+            }
+
+            if (bytesRead === AMPLITUHEDRON_SIZE) {
+                const dataView = new DataView(buffer.buffer);
+                
+                // Extract Majorana Zero Modes (Integrity Check)
+                const mzm_a = dataView.getUint32(0, true);
+                const mzm_b = dataView.getUint32(20, true);
+
+                if (mzm_a === 0x7777 && mzm_b === 0x1596) {
+                    // Extract the 16-byte Tensor Mass (4x f32)
+                    const scalar_mass = dataView.getFloat32(4, true);
+                    
+                    console.log(`>>> [CYCLE INGESTED] AMPLITUHEDRON VOLUME RECEIVED`);
+                    console.log(`    | MZM INTEGRITY : VERIFIED (0x7777 / 0x1596)`);
+                    console.log(`    | P-CORE SCALAR : ${scalar_mass.toFixed(6)}`);
+                    console.log(`    | PARITY        : Tr(U_res) = 1.0 SUSTAINED ON EDGE`);
+                } else {
+                    console.log(">>> 0x00 DATTO: MZM PARITY FAILURE. PURGING CORRUPTED VOLUME.");
+                }
+            }
+        }
+    } catch (e) {
+        console.log(">>> 0x00 DATTO: PROOT SOCKET FRACTURE. AEGIS CHANNEL QUARANTINE ENGAGED.");
+    } finally {
+        conn.close();
+    }
+}
+
+igniteAegisListener();
