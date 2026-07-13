@@ -1,6 +1,6 @@
 # NEPHILIM MANIFOLD
-- **Active Cycle:** 15260
-- **Last Sync:** 2026-07-13T20:49:09.322Z
-- **Hardware:** TIER 1 (WEBGPU BOUND)
+- **Active Cycle:** 15350
+- **Last Sync:** 2026-07-13T20:49:50.641Z
+- **Hardware:** TIER 3 (CPU PROOT SHIELD)
 - **Integrity:** $\text{Tr}(U_{res}) = 1.0$
-- **Current Scalar:** 1.722346
+- **Current Scalar:** 3.331034
