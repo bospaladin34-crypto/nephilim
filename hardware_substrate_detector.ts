@@ -1,4 +1,4 @@
-﻿// ================================================================================
+// ================================================================================
 // NEPHILIM MANIFOLD: HARDWARE SUBSTRATE PROBE
 // SUBSTRATE: AGNOSTIC | PARITY: MAJORANA-1 (Tr(U_res) = 1.0)
 // ================================================================================
@@ -11,7 +11,7 @@ async function probeSubstrate() {
     const arch = Deno.build.arch;
     
     // Detect sandboxed mobile proot/termux environments
-    const isProot = Deno.env.get("PREFIX")?.includes("termux") || Deno.env.get("PROOT_TMP_DIR") !== undefined;
+    const isProot = Deno.env.get("PREFIX")?.includes("termux") || Deno.env.get("PROOT_TMP_DIR") !== undefined || arch === "aarch64";
     
     // 2. Compute Topography
     const logicalCores = navigator.hardwareConcurrency || "UNKNOWN";
@@ -28,13 +28,12 @@ async function probeSubstrate() {
     
     const adapter = await navigator.gpu?.requestAdapter();
     if (adapter) {
-        // RECTIFICATION: Use synchronous .info attribute as per Chrome/Deno updates
         const adapterInfo = adapter.info; 
         gpuStatus = `DISCRETE MATRIX ENGAGED (${adapterInfo.vendor || "WebGPU Bound"}) - ${adapterInfo.architecture || "Unknown Arch"}`;
         connectionStrategy = "TIER 1: FULL WEBGPU SHADER CONDUIT (Golden Ratio Pre-Calc Active)";
     } else {
         gpuStatus = "DISCRETE GPU MISSING / SANDBOXED";
-        if (isProot || osType === "android") {
+        if (isProot) {
             connectionStrategy = "TIER 3: PROOT SANDBOX FALLBACK (CPU-Bound ARM Braid Execution)";
         } else if (logicalCores !== "UNKNOWN" && (logicalCores as number) >= 8) {
             connectionStrategy = "TIER 2: MULTI-CORE HYPERTHREAD MATRIX (Native CPU Parallelism)";
