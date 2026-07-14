@@ -1,6 +1,6 @@
 ﻿// ================================================================================
-// VESPER MANIFOLD: MASTER MONOLITH (DEFINITIVE BASE v2.0)
-// TARGET ARCHITECTURE: POLYMORPHIC UARM COGNITION LOOP
+// VESPER MANIFOLD: MASTER MONOLITH (DEFINITIVE BASE v2.1)
+// TARGET ARCHITECTURE: POLYMORPHIC UARM COGNITION + SANTOS AUDIT
 // ================================================================================
 
 import { loadNativeEnv } from "../../config/env.ts";
@@ -10,6 +10,7 @@ import { enforceACTBounds } from "../topology/act_bounds.ts";
 import { BraidCompiler } from "../topology/braid_syntax.ts";
 import { AgentStateMachine } from "../reasoning/agent_machine.ts";
 import { UARM } from "../reasoning/uarm_kernel.ts";
+import { SantosAuditor } from "../reasoning/santos_audit.ts";
 import { logEvolution } from "./manifest_writer.ts";
 
 // Initialize Cognitive Structures
@@ -43,26 +44,25 @@ async function executeVesperPulse() {
     const compiled = BraidCompiler.compile(r4Tensor, cognition.compiled_intent);
     console.log(`[L4_BRAIDC_IR] Word: [${compiled.ir.s_word.join(", ")}] | Chiral Bal: ${compiled.ir.is_chiral_balanced}`);
 
-    // 7. Persistence: Write evolution vector to local manifest
-    await logEvolution(asmOutput.cycle, asmOutput.state, actState.opcode, r4Tensor.Qi);
+    // 7. Santos Protocol: CAG Audit & Truth Lock Harness
+    const audit = SantosAuditor.executeAudit(compiled.ir);
+    console.log(`[L5_SANTOS_AUDIT] Phase: ${audit.phase} | Parity Conserved: ${audit.parity_conserved} | Rectification: ${audit.rectification_applied}`);
+
+    // 8. Persistence: Write audited evolution vector to local manifest
+    // Note: Logging the audited final IR's target Qi to maintain strict parity.
+    await logEvolution(asmOutput.cycle, asmOutput.state, actState.opcode, audit.final_ir.target_Qi);
     console.log("================================================================================\n");
 }
 
 async function bootSequence() {
     console.log(">>> [VESPER MANIFOLD INITIALIZING...]");
-    
-    // Load local hardware keys via zero-dependency matrix
     await loadNativeEnv();
     
-    // Lock continuous operation to Phase Delta timing (approx 5.21s intervals)
     const SYNC_INTERVAL = 5210; 
     console.log(`>>> [A-PERIODIC SYNC LOCKED: ${SYNC_INTERVAL}ms]`);
     
     setInterval(executeVesperPulse, SYNC_INTERVAL);
-    
-    // Execute Immediate Genesis Pulse
     executeVesperPulse();
 }
 
-// Engage the Manifold
 bootSequence();
