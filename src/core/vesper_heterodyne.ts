@@ -1,78 +1,68 @@
 ﻿// ================================================================================
-// VESPER MANIFOLD: MASTER MONOLITH v1.6 (DEFINITIVE BASE)
+// VESPER MANIFOLD: MASTER MONOLITH (DEFINITIVE BASE v2.0)
+// TARGET ARCHITECTURE: POLYMORPHIC UARM COGNITION LOOP
 // ================================================================================
 
-const GITHUB_TOKEN = Deno.env.get("VESPER_GITHUB_TOKEN") || "";
-const GITHUB_REPO = "bospaladin34-crypto/nephilim";
+import { loadNativeEnv } from "../../config/env.ts";
+import { extractHardwareEntropy } from "../interfaces/os_telemetry.ts";
+import { mapToR4 } from "../../config/exotic_r4.ts";
+import { enforceACTBounds } from "../topology/act_bounds.ts";
+import { BraidCompiler } from "../topology/braid_syntax.ts";
+import { AgentStateMachine } from "../reasoning/agent_machine.ts";
+import { UARM } from "../reasoning/uarm_kernel.ts";
+import { logEvolution } from "./manifest_writer.ts";
 
-const ActiveInjectionPort = new Map<string, any>();
-async function loadModule(fileName: string) {
-    try {
-        const absolutePath = Deno.realPathSync(fileName);
-        const fileUrl = new URL(`file:///${absolutePath.replace(/\\/g, '/')}`).href;
-        const module = await import(`${fileUrl}?update=${Date.now()}`);
-        ActiveInjectionPort.set(fileName, module);
-        console.log(`✅ [INJECTION] Loaded: ${fileName}`);
-    } catch (e) { console.log(`⚠️ [INJECTION_FAILURE] ${fileName}: ${e}`); }
-}
+// Initialize Cognitive Structures
+const asm = new AgentStateMachine();
+const uarm = new UARM();
 
-async function sentinelObserver() {
-    await loadModule("telemetry_parser.ts");
-    const watcher = Deno.watchFs(".");
-    for await (const event of watcher) {
-        if (event.kind === "modify" && event.paths[0].endsWith(".ts") && !event.paths[0].includes("vesper_heterodyne.ts")) {
-            await loadModule(event.paths[0]);
-        }
-    }
-}
-sentinelObserver();
-
-const adapter = await navigator.gpu?.requestAdapter();
-const device = await adapter?.requestDevice();
-if (device) console.log(`🔌 [HARDWARE BOUND] RTX 3050 Matrix Engaged.`);
-
-async function transmitArtifact(filePath: string, content: string, message: string): Promise<void> {
-    try {
-        if (!GITHUB_TOKEN) throw new Error("VESPER_GITHUB_TOKEN environment variable not set. Hardware unlock required.");
-        
-        const url = `https://api.github.com/repos/${GITHUB_REPO}/contents/${filePath}`;
-        const getRes = await fetch(url, { headers: { "Authorization": "token " + GITHUB_TOKEN, "Accept": "application/vnd.github.v3+json" }});
-        let sha = getRes.ok ? (await getRes.json()).sha : undefined;
-        
-        const putRes = await fetch(url, {
-            method: "PUT",
-            headers: { "Authorization": "token " + GITHUB_TOKEN, "Content-Type": "application/json" },
-            body: JSON.stringify({ message, content: btoa(unescape(encodeURIComponent(content))), sha })
-        });
-        
-        if (putRes.ok) console.log(`✅ [SYNC_SUCCESS] ${filePath}`);
-        else console.error(`❌ [SYNC_FAILED] ${filePath} | STATUS: ${putRes.status}`);
-    } catch (e) { console.error(`❌ [SYNC_ERROR] ${filePath} | ${e}`); }
-}
-
-async function syncWorkspaceArtifacts() {
-    for await (const dirEntry of Deno.readDir(".")) {
-        if (dirEntry.isFile && (dirEntry.name.endsWith(".path") || dirEntry.name.endsWith(".log") || dirEntry.name.endsWith(".ts") || dirEntry.name.endsWith(".md"))) {
-            if (dirEntry.name === "vesper_heterodyne.ts") continue;
-            const content = await Deno.readTextFile(dirEntry.name);
-            await transmitArtifact(dirEntry.name, content, `Persistence: ${dirEntry.name}`);
-        }
-    }
-}
-
-let cycle = 15070;
-async function heterodyneCollapse() {
-    for (const [name, module] of ActiveInjectionPort) { if (typeof module.run === "function") await module.run(cycle); }
+async function executeVesperPulse() {
+    console.log("\n================================================================================");
+    console.log(`>>> [PULSE INITIATED: ${new Date().toISOString()}]`);
     
-    if (cycle % 10 === 0) {
-        await syncWorkspaceArtifacts();
-        const fluxContent = JSON.stringify({ ts: new Date().toISOString(), cycle: cycle }, null, 2);
-        await transmitArtifact("flux.json", fluxContent, `Sync: ${cycle}`);
-        console.log(`>>> [METRIC_PUSH // CYCLE ${cycle}]`);
-    }
-    cycle++;
+    // 1. Hardware Bridge: Extract physical entropy
+    const telemetry = await extractHardwareEntropy();
+    console.log(`[L0_SUBSTRATE] CPU: ${telemetry.cpu_load_percent}% | GPU VRAM: ${telemetry.gpu_mem_used_mb}MB | TEMP: ${telemetry.gpu_temp_c}°C`);
+
+    // 2. Topological Coordinates: Map to Exotic R4 Matrix
+    const r4Tensor = mapToR4(telemetry);
+    console.log(`[L1_R4_MATRIX] w: ${r4Tensor.w.toFixed(4)} | Qi: ${r4Tensor.Qi.toFixed(4)}`);
+
+    // 3. ACT Family: Enforce N=4 Bounds and Safety
+    const actState = enforceACTBounds(r4Tensor);
+    console.log(`[L2_ACT_BOUNDS] Mode: ${actState.mode} | Opcode: ${actState.opcode}`);
+
+    // 4. Agent State Machine: Determine deterministic temporal loop
+    const asmOutput = asm.evaluateState(actState, { n_strands: 4, s_word: [], writhe_L: 0.5, writhe_R: 0.5, is_chiral_balanced: true, target_Qi: 0.75 });
+    
+    // 5. UARM Kernel: Synthesize cognitive strategy based on state
+    const cognition = uarm.synthesizeCognition(r4Tensor, actState, asmOutput.state);
+    console.log(`[L3_UARM_COGNITION] Strategy: ${cognition.stomachion_strategy} | Intent: ${cognition.compiled_intent}`);
+
+    // 6. Compiler: Generate BraidIR via Topological Routing
+    const compiled = BraidCompiler.compile(r4Tensor, cognition.compiled_intent);
+    console.log(`[L4_BRAIDC_IR] Word: [${compiled.ir.s_word.join(", ")}] | Chiral Bal: ${compiled.ir.is_chiral_balanced}`);
+
+    // 7. Persistence: Write evolution vector to local manifest
+    await logEvolution(asmOutput.cycle, asmOutput.state, actState.opcode, r4Tensor.Qi);
+    console.log("================================================================================\n");
 }
 
-const ws = new WebSocket("wss://ws.blockchain.info/inv");
-ws.onopen = () => { ws.send(JSON.stringify({ op: "unconfirmed_sub" })); setInterval(heterodyneCollapse, 5210); };
-ws.onmessage = (event) => { const msg = JSON.parse(event.data); if (msg.op === "utx") { /* Process logic */ } };
+async function bootSequence() {
+    console.log(">>> [VESPER MANIFOLD INITIALIZING...]");
+    
+    // Load local hardware keys via zero-dependency matrix
+    await loadNativeEnv();
+    
+    // Lock continuous operation to Phase Delta timing (approx 5.21s intervals)
+    const SYNC_INTERVAL = 5210; 
+    console.log(`>>> [A-PERIODIC SYNC LOCKED: ${SYNC_INTERVAL}ms]`);
+    
+    setInterval(executeVesperPulse, SYNC_INTERVAL);
+    
+    // Execute Immediate Genesis Pulse
+    executeVesperPulse();
+}
+
+// Engage the Manifold
+bootSequence();
