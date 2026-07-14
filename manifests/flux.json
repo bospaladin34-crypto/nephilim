@@ -1,0 +1,5 @@
+{
+  "status": "DIAGNOSTIC_OVERRIDE",
+  "entropy": 0.55,
+  "message": "Testing strict payload formatting."
+}
