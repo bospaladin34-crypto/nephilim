@@ -1,5 +1,18 @@
 {
-  "status": "DIAGNOSTIC_OVERRIDE",
-  "entropy": 0.55,
-  "message": "Testing strict payload formatting."
+  "cycle": 5,
+  "state": "IDLE_CONSERVATION",
+  "telemetry": {
+    "cpu_load_percent": 37,
+    "gpu_util_percent": 0,
+    "gpu_mem_used_mb": 909,
+    "gpu_mem_total_mb": 6144,
+    "gpu_temp_c": 42,
+    "timestamp": "2026-07-14T01:48:23.518Z"
+  },
+  "cognition": {
+    "stomachion_strategy": "EXPLORATORY: High Variance Search",
+    "e8_projection_type": "HYBRID_PROJECTION: Maintain Manifold Form",
+    "sheaf_consistency_glued": true,
+    "compiled_intent": "EXPLORE"
+  }
 }
