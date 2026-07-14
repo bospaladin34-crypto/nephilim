@@ -1,17 +1,17 @@
 ﻿// ================================================================================
-// VESPER MANIFOLD: MASTER MONOLITH (PHASE III FINALIZED)
+// VESPER MANIFOLD: MASTER MONOLITH (PATH CORRECTED v2.4)
 // ================================================================================
 
-import { loadNativeEnv } from "../../config/env.ts";
+import { loadNativeEnv } from "../config/env.ts";
 import { extractHardwareEntropy } from "../interfaces/os_telemetry.ts";
 import { externalEntropy, initEntropyListener } from "../interfaces/vesper_ws.ts";
 import { initGpuMatrix } from "../interfaces/rtx_matrix.ts";
-import { mapToR4 } from "../../config/exotic_r4.ts";
-import { enforceACTBounds } from "../../topology/act_bounds.ts";
-import { BraidCompiler } from "../../topology/braid_syntax.ts";
-import { AgentStateMachine } from "../../reasoning/agent_machine.ts";
-import { UARM } from "../../reasoning/uarm_kernel.ts";
-import { SantosAuditor } from "../../reasoning/santos_audit.ts";
+import { mapToR4 } from "../config/exotic_r4.ts";
+import { enforceACTBounds } from "../topology/act_bounds.ts";
+import { BraidCompiler } from "../topology/braid_syntax.ts";
+import { AgentStateMachine } from "../reasoning/agent_machine.ts";
+import { UARM } from "../reasoning/uarm_kernel.ts";
+import { SantosAuditor } from "../reasoning/santos_audit.ts";
 import { logEvolution } from "./manifest_writer.ts";
 import { transmitFluxArtifact } from "../interfaces/github_sync.ts";
 
@@ -44,8 +44,8 @@ async function executeVesperPulse() {
 async function bootSequence() {
     console.log(">>> [VESPER MANIFOLD INITIALIZING...]");
     await loadNativeEnv();
-    await initGpuMatrix();          // Ignition
-    await initEntropyListener();    // Stream
+    await initGpuMatrix();
+    await initEntropyListener();
     setInterval(executeVesperPulse, 5210);
     executeVesperPulse();
 }
