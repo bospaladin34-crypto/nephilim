@@ -1,0 +1,4 @@
+﻿# MANIFOLD SECURITY FIREWALL
+.env
+*.log
+*.path
