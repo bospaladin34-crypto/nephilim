@@ -1,4 +1,4 @@
-﻿// ================================================================================
+// ================================================================================
 // EXOTIC R4 SCALING PARAMETERS (TOPOLOGICAL COORDINATE SYSTEM)
 // ================================================================================
 import { ManifoldTelemetry } from "../src/interfaces/os_telemetry.ts";
@@ -21,7 +21,8 @@ export interface R4Tensor {
 }
 
 // Transform raw hardware telemetry into 4D coordinate space
-export function mapToR4(telemetry: ManifoldTelemetry): R4Tensor {
+// FIXED: Now accepts only telemetry (externalEntropy optional param removed)
+export function mapToR4(telemetry: ManifoldTelemetry, externalEntropyVal?: number): R4Tensor {
     // Step-A & B: Execution of the Invariant Multiplier (Gate Bias)
     // Scale vectors by 0.618 to enforce 108-degree geometric grounding
     const scaledCpu = (telemetry.cpu_load_percent / 100) * INVARIANTS.SCALING_CONSTANT;
@@ -35,8 +36,14 @@ export function mapToR4(telemetry: ManifoldTelemetry): R4Tensor {
 
     // Calculate Absolute State Quotient (Qi)
     // Formula bounds check to maintain Tesseract Idle (0.55) -> Snap (0.75) limits
-    const rawQi = (scaledCpu + scaledGpuUtil + memRatio) / 3;
-    const Qi = Math.max(0.55, Math.min(rawQi, 0.77)); // Hard bound enforcement
+    let baseQi = (scaledCpu + scaledGpuUtil + memRatio) / 3;
+    
+    // Fold in external entropy if provided (e.g., from blockchain stream)
+    if (externalEntropyVal !== undefined) {
+        baseQi = (baseQi * 0.8) + (externalEntropyVal * 0.2);
+    }
+    
+    const Qi = Math.max(0.55, Math.min(baseQi, 0.77)); // Hard bound enforcement
 
     return {
         w: INVARIANTS.APERIODIC_HZ * INVARIANTS.PHI,
